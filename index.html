@@ -2,653 +2,547 @@
 <html lang="am">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>የኦርቶዶክስ ተዋሕዶ ትምህርት እና ጥያቄ-መልስ</title>
-    <!-- Telegram WebApp SDK -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ኦርቶዶክስ ተዋሕዶ ትምህርት</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --primary-gold: #D4AF37;
-            --dark-gold: #B78103;
-            --primary-blue: #1A365D;
-            --accent-red: #9B111E;
-            --bg-color: #F0F4F8;
-            --card-bg: #FFFFFF;
-            --text-color: #2D3748;
-            --text-muted: #718096;
-            --correct-green: #2E7D32;
-            --incorrect-red: #C62828;
-            --streak-orange: #FF6D00;
-            --border-color: rgba(212, 175, 55, 0.25);
+            --gold: #D4AF37;
+            --gold-dark: #B78103;
+            --navy: #0B1C2C;
+            --navy-light: #1A365D;
+            --card: #152536;
+            --text: #F0E6D2;
+            --muted: #A0AEC0;
+            --green: #2E7D32;
+            --red: #C62828;
+            --orange: #FF6D00;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
-
-        /* Dark Theme Variables */
-        [data-theme="dark"] {
-            --bg-color: #0F172A;
-            --card-bg: #1E293B;
-            --text-color: #F8FAFC;
-            --text-muted: #94A3B8;
-            --primary-blue: #38BDF8;
-            --border-color: rgba(212, 175, 55, 0.4);
+        [data-theme="light"] {
+            --navy: #F0F4F8;
+            --navy-light: #1A365D;
+            --card: #FFFFFF;
+            --text: #1A202C;
+            --muted: #718096;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Ethiopic", sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 12px;
-            min-height: 100vh;
+            background: var(--navy);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Ethiopic", sans-serif;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        header {
-            position: relative;
-            text-align: center;
-            padding: 12px 0;
-            background: linear-gradient(135deg, #1A365D, #2C5282);
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 12px rgba(26, 54, 93, 0.2);
-            border-bottom: 3px solid var(--primary-gold);
-        }
-
-        header h1 {
-            font-size: 1.2rem;
-            color: var(--primary-gold);
-            margin-bottom: 2px;
-        }
-
-        header p {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
-
-        .theme-toggle-btn {
-            position: absolute;
-            top: 8px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .user-banner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            padding: 10px 12px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: var(--text-color);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
-        }
-
-        .screen {
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            flex: 1;
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 14px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-            border: 1px solid var(--border-color);
-        }
-
-        .category-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-
-        .btn {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1.5px solid var(--border-color);
-            padding: 12px 14px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.15s ease;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, #D4AF37, #B78103);
-            color: white;
-            border: none;
-            box-shadow: 0 3px 8px rgba(183, 129, 3, 0.3);
-        }
-
-        .btn-share {
-            background: linear-gradient(135deg, #0088cc, #006699);
-            color: white;
-            border: none;
-            box-shadow: 0 3px 8px rgba(0, 136, 204, 0.3);
-        }
-
-        .btn-primary {
-            background: #1A365D;
-            color: white;
-            border: none;
-        }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: var(--text-color);
-            margin-bottom: 6px;
-        }
-
-        .streak-badge {
-            background: #FFF5F5;
-            color: var(--streak-orange);
-            padding: 3px 8px;
-            border-radius: 12px;
-            border: 1px solid var(--streak-orange);
-            font-size: 0.8rem;
-            display: none;
-        }
-
-        .timer-bar {
-            height: 8px;
-            background: rgba(226, 232, 240, 0.3);
-            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 12px;
+            transition: background .3s;
         }
-
-        .timer-progress {
-            height: 100%;
-            background: var(--correct-green);
-            width: 100%;
-            transition: width 1s linear;
-        }
-
-        .question-text {
-            font-size: 1.05rem;
-            font-weight: 600;
-            line-height: 1.5;
-            margin-bottom: 14px;
-            color: var(--text-color);
-        }
-
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .option-btn {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1.5px solid var(--border-color);
-            padding: 12px;
-            border-radius: 8px;
-            text-align: left;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .option-btn.correct {
-            background: #E8F5E9 !important;
-            border-color: var(--correct-green) !important;
-            color: var(--correct-green) !important;
-            font-weight: bold;
-        }
-
-        .option-btn.incorrect {
-            background: #FFEBEE !important;
-            border-color: var(--incorrect-red) !important;
-            color: var(--incorrect-red) !important;
-            font-weight: bold;
-        }
-
-        .explanation-box {
-            margin-top: 12px;
-            padding: 10px 12px;
-            background: rgba(212, 175, 55, 0.1);
-            border-left: 4px solid var(--primary-gold);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            display: none;
-        }
-
-        .results-summary {
+        header {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #0B1C2C, #1A365D);
+            color: white;
             text-align: center;
-            padding: 16px 8px;
+            padding: 10px 12px 8px;
+            border-bottom: 3px solid var(--gold);
+            position: relative;
         }
-
-        .score-badge {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--primary-gold);
-            margin: 6px 0;
+        [data-theme="light"] header { background: linear-gradient(135deg, #1A365D, #2C5282); }
+        header h1 { font-size: 1.05rem; color: var(--gold); margin-bottom: 1px; }
+        header p { font-size: 0.72rem; opacity: .85; }
+        .theme-btn {
+            position: absolute; top: 8px; right: 10px;
+            background: rgba(255,255,255,.15); border: none; color: white;
+            width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
         }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin: 12px 0;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            font-size: 0.75rem;
-            text-align: center;
+        .user-bar {
+            flex-shrink: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--card); margin: 8px 10px 0; padding: 8px 12px;
+            border-radius: 12px; border: 1px solid rgba(212,175,55,.3);
+            font-size: 0.82rem; font-weight: 600;
         }
-
-        .badges-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-            margin: 10px 0;
+        .level-chip {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #0B1C2C; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700;
         }
-
-        .badge-chip {
-            background: rgba(212, 175, 55, 0.2);
-            border: 1px solid var(--primary-gold);
-            color: var(--text-color);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 10px;
-            background: rgba(0, 0, 0, 0.03);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            border-left: 3px solid var(--primary-gold);
-        }
-
-        .back-bar {
-            margin-bottom: 8px;
-            display: none;
-        }
-
+        .back-bar { flex-shrink: 0; padding: 4px 10px; display: none; }
         .back-btn {
-            background: rgba(0, 0, 0, 0.08);
-            color: var(--text-color);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.85rem;
+            background: rgba(255,255,255,.08); color: var(--text); border: none;
+            padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8rem;
         }
+        .screen {
+            display: none; flex-direction: column; flex: 1; overflow: hidden;
+            padding: 8px 10px calc(10px + var(--safe-bottom));
+        }
+        .screen.active { display: flex; }
+        .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+        .card {
+            background: var(--card); border-radius: 14px; padding: 12px;
+            border: 1px solid rgba(212,175,55,.25); margin-bottom: 8px;
+        }
+        .btn {
+            background: var(--card); color: var(--text); border: 1.5px solid rgba(212,175,55,.3);
+            padding: 11px 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 600;
+            text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            transition: transform .12s;
+        }
+        .btn:active { transform: scale(.97); }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: #0B1C2C; border: none; font-weight: 700;
+        }
+        .btn-primary { background: var(--navy-light); color: white; border: none; justify-content: center; }
+        .btn-share { background: linear-gradient(135deg, #0088cc, #006699); color: white; border: none; justify-content: center; }
+        .category-grid { display: flex; flex-direction: column; gap: 7px; }
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(26,54,93,.1));
+            border: 1px solid var(--gold); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
+        .streak-badge { background: #3A1C00; color: var(--orange); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; display: none; }
+        .timer-bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+        .timer-progress { height: 100%; background: var(--green); width: 100%; transition: width 1s linear; }
+        .question-text { font-size: 1.02rem; font-weight: 600; line-height: 1.45; margin-bottom: 12px; }
+        .options-list { display: flex; flex-direction: column; gap: 7px; }
+        .option-btn {
+            background: var(--card); color: var(--text); border: 1.5px solid rgba(212,175,55,.3);
+            padding: 11px; border-radius: 10px; text-align: left; font-size: 0.88rem; font-weight: 500;
+        }
+        .option-btn.correct { background: #1B3A1B !important; border-color: var(--green) !important; color: #A5D6A7 !important; }
+        .option-btn.incorrect { background: #3A1B1B !important; border-color: var(--red) !important; color: #EF9A9A !important; }
+        [data-theme="light"] .option-btn.correct { background: #E8F5E9 !important; color: var(--green) !important; }
+        [data-theme="light"] .option-btn.incorrect { background: #FFEBEE !important; color: var(--red) !important; }
+        .explanation-box {
+            margin-top: 10px; padding: 9px 11px; background: rgba(212,175,55,.12);
+            border-left: 4px solid var(--gold); border-radius: 8px; font-size: 0.8rem; display: none;
+        }
+        .results-summary { text-align: center; padding: 14px 6px; }
+        .score-badge { font-size: 2.1rem; font-weight: 800; color: var(--gold); margin: 4px 0; }
+        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 10px 0; font-size: 0.72rem; text-align: center; }
+        .stats-row div { background: rgba(0,0,0,.15); padding: 6px 4px; border-radius: 8px; }
+        .badges-row { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 8px 0; }
+        .badge-chip {
+            background: rgba(212,175,55,.2); border: 1px solid var(--gold); color: var(--text);
+            padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;
+        }
+        .leaderboard-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+            background: rgba(0,0,0,.12); border-radius: 10px; margin-bottom: 6px;
+            border-left: 3px solid var(--gold); font-size: 0.85rem;
+        }
+        .lb-avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--navy-light);
+            display: flex; align-items: center; justify-content: center; font-size: 1.1rem; overflow: hidden; flex-shrink: 0;
+        }
+        .lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .progress-ring { width: 56px; height: 56px; }
+        .xp-bar { height: 6px; background: rgba(255,255,255,.12); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #F6E05E); border-radius: 4px; }
+        .mastery-bar { height: 5px; background: rgba(255,255,255,.1); border-radius: 3px; margin-top: 3px; }
+        .mastery-fill { height: 100%; background: var(--gold); border-radius: 3px; }
+        .popup {
+            position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none;
+            align-items: center; justify-content: center; z-index: 100; padding: 20px;
+        }
+        .popup.show { display: flex; }
+        .popup-card {
+            background: var(--card); border-radius: 18px; padding: 20px; max-width: 300px; width: 100%;
+            text-align: center; border: 2px solid var(--gold); animation: popIn .35s ease;
+        }
+        @keyframes popIn { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .admin-list { font-size: 0.8rem; max-height: 180px; overflow-y: auto; }
+        .admin-row { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
-
     <header>
-        <h1>ኢትዮጵያ ኦርቶዶክስ ተዋሕዶ ቤተክርስቲያን</h1>
-        <p>የሃይማኖት ትምህርት እና ጥያቄ-መልስ ማዕከል</p>
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <h1>ኢትዮጵያ ኦርቶዶክስ ተዋሕዶ</h1>
+        <p>ትምህርት • ጥያቄ-መልስ • ውድድር</p>
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
     </header>
 
-    <div class="user-banner">
-        <span id="userNameDisplay">👤 ተጫዋች: ሰላም</span>
-        <span id="userTotalPoints">⭐ 0 ነጥብ</span>
+    <div class="user-bar">
+        <span id="userNameDisplay">👤 ተጫዋች</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+            <span class="level-chip" id="levelChip">Lv.1</span>
+            <span id="userTotalPoints">⭐ 0</span>
+        </div>
     </div>
 
-    <div id="backBar" class="back-bar">
+    <div class="back-bar" id="backBar">
         <button class="back-btn" onclick="goBack()">⬅️ ተመለስ</button>
     </div>
 
-    <!-- SCREEN 1: MAIN MENU -->
+    <!-- MAIN MENU -->
     <div id="screenMainMenu" class="screen active">
-        <!-- Player of the Week Banner -->
-        <div class="card" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(26, 54, 93, 0.05)); border: 1px solid var(--primary-gold);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="scroll-area">
+            <div class="hero-banner">
                 <div>
-                    <span style="font-size: 0.75rem; font-weight: bold; color: var(--dark-gold);">👑 የሳምንቱ ምርጥ ተጫዋች</span>
-                    <h4 id="weeklyHeroName" style="margin-top: 2px;">እስካሁን አልተወሰነም</h4>
+                    <div style="font-size:0.7rem;font-weight:700;color:var(--gold);">👑 የሳምንቱ ምርጥ</div>
+                    <div id="weeklyHeroName" style="font-weight:700;margin-top:2px;">እስካሁን አልተወሰነም</div>
                 </div>
-                <span id="weeklyHeroScore" style="font-size: 1.1rem; font-weight: bold; color: var(--primary-gold);">0 ነጥብ</span>
+                <div id="weeklyHeroScore" style="font-weight:800;color:var(--gold);">0</div>
             </div>
-        </div>
 
-        <div class="category-grid">
-            <button class="btn btn-gold" onclick="selectMainCategory('Ye-Tekalale')"><span>የተቀላቀለ ጥያቄዎች</span> <span>🎲</span></button>
-            <button class="btn" onclick="selectMainCategory('Ye-Adminu_Ye-Zare_Tyaqewoch')"><span>የአድሚኑ የዛሬ ጥያቄዎች</span> <span>📅</span></button>
-            <button class="btn" onclick="selectMainCategory('Addis_Kidan')"><span>አዲስ ኪዳን</span> <span>📖</span></button>
-            <button class="btn" onclick="selectMainCategory('Bluy_Kidan')"><span>ብሉይ ኪዳን</span> <span>📜</span></button>
-            <button class="btn btn-gold" onclick="openMysteriesMenu()"><span>አምስቱ አእማደ ምስጢራት</span> <span>🏛️</span></button>
-            <button class="btn" onclick="selectMainCategory('Negere_Kristos')"><span>ነገረ ክርስቶስ</span> <span>✝️</span></button>
-            <button class="btn" onclick="selectMainCategory('SebatuMstirat')"><span>ሰባቱ ምስጢራት</span> <span>🕊️</span></button>
-            <button class="btn" onclick="selectMainCategory('Kidusan_ena_Emebetachin')"><span>ቅዱሳን እና እመቤታችን</span> <span>👑</span></button>
-            <button class="btn" onclick="selectMainCategory('Abew_Kidusan')"><span>አበው ቅዱሳን</span> <span>👴</span></button>
-            <button class="btn" onclick="selectMainCategory('Tarikoch')"><span>ታሪኮች</span> <span>📚</span></button>
-            <button class="btn" onclick="selectMainCategory('Trguame')"><span>ትርጓሜ</span> <span>🔍</span></button>
-            <button class="btn" onclick="selectMainCategory('Orthodox_Dogma_Srate_Betekristian')"><span>ኦርቶዶክስ ዶግማ እና ሥርዓት</span> <span>⚖️</span></button>
-            <button class="btn" onclick="selectMainCategory('Aqabe_Emnet_Protestant')"><span>አቃቤ እምነት (ስለ ፕሮቴስታንት)</span> <span>🛡️</span></button>
-            <button class="btn" onclick="selectMainCategory('Aqabe_Emnet_Muslim')"><span>አቃቤ እምነት (ስለ ሙስሊም)</span> <span>🛡️</span></button>
-        </div>
+            <div class="card" style="padding:10px 12px;">
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px;">
+                    <span>XP</span><span id="xpText">0 / 500</span>
+                </div>
+                <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+            </div>
 
-        <div style="margin-top: 10px; display: flex; gap: 8px;">
-            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="openLeaderboard()">🏆 የደረጃ ሰንጠረዥ</button>
-            <button id="adminHubBtn" class="btn btn-gold" style="flex: 1; justify-content: center; display: none;" onclick="openAdminHub()">🛡️ የአድሚን ማዕከል</button>
+            <div class="category-grid" style="margin-top:6px;">
+                <button class="btn btn-gold" onclick="selectMainCategory('Ye-Tekalale')"><span>🎲 የተቀላቀለ</span></button>
+                <button class="btn" onclick="selectMainCategory('Ye-Adminu_Ye-Zare_Tyaqewoch')"><span>📅 የዛሬ ጥያቄዎች</span></button>
+                <button class="btn" onclick="selectMainCategory('Addis_Kidan')"><span>📖 አዲስ ኪዳን</span></button>
+                <button class="btn" onclick="selectMainCategory('Bluy_Kidan')"><span>📜 ብሉይ ኪዳን</span></button>
+                <button class="btn btn-gold" onclick="openMysteriesMenu()"><span>🏛️ አምስቱ አእማደ ምስጢራት</span></button>
+                <button class="btn" onclick="selectMainCategory('Negere_Kristos')"><span>✝️ ነገረ ክርስቶስ</span></button>
+                <button class="btn" onclick="selectMainCategory('SebatuMstirat')"><span>🕊️ ሰባቱ ምስጢራት</span></button>
+                <button class="btn" onclick="selectMainCategory('Kidusan_ena_Emebetachin')"><span>👑 ቅዱሳን እና እመቤታችን</span></button>
+                <button class="btn" onclick="selectMainCategory('Abew_Kidusan')"><span>👴 አበው ቅዱሳን</span></button>
+                <button class="btn" onclick="selectMainCategory('Tarikoch')"><span>📚 ታሪኮች</span></button>
+                <button class="btn" onclick="selectMainCategory('Trguame')"><span>🔍 ትርጓሜ</span></button>
+                <button class="btn" onclick="selectMainCategory('Orthodox_Dogma_Srate_Betekristian')"><span>⚖️ ዶግማ እና ሥርዓት</span></button>
+                <button class="btn" onclick="selectMainCategory('Aqabe_Emnet_Protestant')"><span>🛡️ አቃቤ እምነት (ፕሮቴስታንት)</span></button>
+                <button class="btn" onclick="selectMainCategory('Aqabe_Emnet_Muslim')"><span>🛡️ አቃቤ እምነት (ሙስሊም)</span></button>
+            </div>
+
+            <div style="display:flex;gap:7px;margin-top:10px;">
+                <button class="btn btn-primary" style="flex:1;" onclick="openLeaderboard()">🏆 ደረጃ</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="openAchievements()">🎖️ ሽልማቶች</button>
+                <button id="adminHubBtn" class="btn btn-gold" style="flex:1;display:none;" onclick="openAdminHub()">🛡️ አድሚን</button>
+            </div>
         </div>
     </div>
 
-    <!-- SCREEN 2: FIVE PILLARS MENU -->
+    <!-- MYSTERIES -->
     <div id="screenMysteriesMenu" class="screen">
-        <div class="card">
-            <h3>🏛️ አምስቱ አእማደ ምስጢራት</h3>
-            <p style="font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">እባክዎን የሚማሩበትን ምስጢር ይምረጡ፡</p>
-        </div>
-        <div class="category-grid">
-            <button class="btn" onclick="selectSubCategory('Mstire_Selasie')"><span>ምሥጢረ ሥላሴ</span> <span>1️⃣</span></button>
-            <button class="btn" onclick="selectSubCategory('Mstire_Sigawe')"><span>ምሥጢረ ሥጋዌ</span> <span>2️⃣</span></button>
-            <button class="btn" onclick="selectSubCategory('Mstire_Timket')"><span>ምሥጢረ ጥምቀት</span> <span>3️⃣</span></button>
-            <button class="btn" onclick="selectSubCategory('Mstire_Qurban')"><span>ምሥጢረ ቁርባን</span> <span>4️⃣</span></button>
-            <button class="btn" onclick="selectSubCategory('Mstire_Tinsae_Mutan')"><span>ምሥጢረ ትንሣኤ ሙታን</span> <span>5️⃣</span></button>
-            <button class="btn btn-gold" onclick="selectSubCategory('Hulumn_qelaql')"><span>ሁሉንም ቀላቅል</span> <span>🎲</span></button>
+        <div class="scroll-area">
+            <div class="card"><h3 style="font-size:1rem;">🏛️ አምስቱ አእማደ ምስጢራት</h3></div>
+            <div class="category-grid">
+                <button class="btn" onclick="selectSubCategory('Mstire_Selasie')"><span>1️⃣ ምሥጢረ ሥላሴ</span></button>
+                <button class="btn" onclick="selectSubCategory('Mstire_Sigawe')"><span>2️⃣ ምሥጢረ ሥጋዌ</span></button>
+                <button class="btn" onclick="selectSubCategory('Mstire_Timket')"><span>3️⃣ ምሥጢረ ጥምቀት</span></button>
+                <button class="btn" onclick="selectSubCategory('Mstire_Qurban')"><span>4️⃣ ምሥጢረ ቁርባን</span></button>
+                <button class="btn" onclick="selectSubCategory('Mstire_Tinsae_Mutan')"><span>5️⃣ ምሥጢረ ትንሣኤ</span></button>
+                <button class="btn btn-gold" onclick="selectSubCategory('Hulumn_qelaql')"><span>🎲 ሁሉንም ቀላቅል</span></button>
+            </div>
         </div>
     </div>
 
-    <!-- SCREEN 3: QUESTION COUNT SELECTION -->
+    <!-- COUNT -->
     <div id="screenCountMenu" class="screen">
-        <div class="card">
-            <h3 id="selectedCategoryTitle">ምድብ: -</h3>
-            <p style="font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">ስንት ጥያቄዎችን መሥራት ይፈልጋሉ?</p>
-        </div>
-        <div class="category-grid">
-            <button class="btn" onclick="startQuiz(5)"><span>5 ጥያቄዎች</span> <span>⚡</span></button>
-            <button class="btn" onclick="startQuiz(10)"><span>10 ጥያቄዎች</span> <span>🎯</span></button>
-            <button class="btn" onclick="startQuiz(20)"><span>20 ጥያቄዎች</span> <span>🔥</span></button>
-            <button class="btn" onclick="startQuiz(30)"><span>30 ጥያቄዎች</span> <span>🏆</span></button>
-            <button class="btn" onclick="startQuiz(50)"><span>50 ጥያቄዎች</span> <span>👑</span></button>
-            <button class="btn btn-gold" onclick="startQuiz('random')"><span>በዘፈቀደ</span> <span>🎲</span></button>
+        <div class="scroll-area">
+            <div class="card">
+                <h3 id="selectedCategoryTitle" style="font-size:0.95rem;">ምድብ</h3>
+                <p style="font-size:0.75rem;opacity:.8;margin-top:3px;">ስንት ጥያቄ?</p>
+            </div>
+            <div class="category-grid">
+                <button class="btn" onclick="startQuiz(5)"><span>5 ጥያቄ ⚡</span></button>
+                <button class="btn" onclick="startQuiz(10)"><span>10 ጥያቄ 🎯</span></button>
+                <button class="btn" onclick="startQuiz(20)"><span>20 ጥያቄ 🔥</span></button>
+                <button class="btn" onclick="startQuiz(30)"><span>30 ጥያቄ 🏆</span></button>
+                <button class="btn" onclick="startQuiz(50)"><span>50 ጥያቄ 👑</span></button>
+                <button class="btn btn-gold" onclick="startQuiz('random')"><span>በዘፈቀደ 🎲</span></button>
+            </div>
         </div>
     </div>
 
-    <!-- SCREEN 4: QUIZ PLAY ENGINE -->
+    <!-- QUIZ -->
     <div id="screenQuiz" class="screen">
-        <div class="card">
+        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
             <div class="quiz-header">
-                <span id="quizProgressText">ጥያቄ 1/10</span>
-                <span id="streakBadge" class="streak-badge">🔥 2x Streak!</span>
-                <span id="quizCategoryBadge">ምድብ</span>
+                <span id="quizProgressText">1/10</span>
+                <span id="streakBadge" class="streak-badge">🔥 2x</span>
+                <span id="quizCategoryBadge" style="font-size:0.75rem;opacity:.8;">ምድብ</span>
             </div>
-            <div class="timer-bar">
-                <div id="timerProgress" class="timer-progress"></div>
-            </div>
-
-            <div id="questionText" class="question-text">የጥያቄው ጽሑፍ...</div>
-
-            <div id="optionsList" class="options-list"></div>
-
+            <div class="timer-bar"><div id="timerProgress" class="timer-progress"></div></div>
+            <div id="questionText" class="question-text"></div>
+            <div id="optionsList" class="options-list" style="flex:1;overflow-y:auto;"></div>
             <div id="explanationBox" class="explanation-box">
-                <h4>💡 ትምህርታዊ ማብራሪያ፡</h4>
-                <p id="explanationText"></p>
+                <strong>💡 ማብራሪያ፡</strong>
+                <p id="explanationText" style="margin-top:3px;"></p>
             </div>
         </div>
-
-        <button id="nextQuestionBtn" class="btn btn-gold" style="display: none; justify-content: center; margin-top: 8px;" onclick="nextQuestion()">ቀጣይ ጥያቄ ➡️</button>
+        <button id="nextQuestionBtn" class="btn btn-gold" style="display:none;justify-content:center;margin-top:8px;" onclick="nextQuestion()">ቀጣይ ➡️</button>
     </div>
 
-    <!-- SCREEN 5: RESULTS PAGE -->
+    <!-- RESULTS -->
     <div id="screenResults" class="screen">
-        <div class="card results-summary">
-            <h3>🏆 የጨዋታው ውጤት</h3>
-            <div id="finalScoreBadge" class="score-badge">0 / 0</div>
-            <div id="pointsEarnedText" style="font-size: 1.1rem; color: var(--primary-gold); font-weight: bold; margin-bottom: 8px;">+0 ነጥብ አግኝተዋል!</div>
-            <p id="accuracyText">ትክክለኛነት: 0%</p>
-
-            <div class="stats-grid">
-                <div>⏱️ ጠቅላላ ጊዜ<br><strong id="totalTimeText">0s</strong></div>
-                <div>⚡ አማካይ ጊዜ<br><strong id="avgTimeText">0s</strong></div>
-                <div>🐢 ከፍተኛ ጊዜ<br><strong id="maxTimeText">0s</strong></div>
+        <div class="scroll-area">
+            <div class="card results-summary">
+                <h3>🏆 ውጤት</h3>
+                <div id="finalScoreBadge" class="score-badge">0/0</div>
+                <div id="pointsEarnedText" style="color:var(--gold);font-weight:700;margin-bottom:4px;">+0 ነጥብ</div>
+                <p id="accuracyText" style="font-size:0.85rem;">ትክክለኛነት: 0%</p>
+                <div class="stats-row">
+                    <div>⏱️ ጠቅላላ<br><strong id="totalTimeText">0s</strong></div>
+                    <div>⚡ አማካይ<br><strong id="avgTimeText">0s</strong></div>
+                    <div>🔥 Streak<br><strong id="maxStreakText">0</strong></div>
+                </div>
+                <div id="badgesContainer" class="badges-row"></div>
+                <p id="feedbackMessage" style="margin-top:8px;font-weight:700;color:var(--gold);font-size:0.85rem;"></p>
             </div>
-
-            <div id="badgesContainer" class="badges-container"></div>
-
-            <p id="feedbackMessage" style="margin: 10px 0; font-weight: bold; color: var(--primary-gold);"></p>
+            <button class="btn btn-share" style="margin-bottom:7px;" onclick="shareResultToGroup()">📤 ለግሩፕ አጋራ</button>
+            <button id="retakeMissedBtn" class="btn btn-gold" style="display:none;justify-content:center;margin-bottom:7px;" onclick="startMissedRetake()">🔄 የተሳሳቱትን ደግመው</button>
+            <button class="btn btn-primary" onclick="resetToHome()">🏠 ዋና ምናሌ</button>
         </div>
-
-        <button class="btn btn-share" style="justify-content: center; font-size: 1rem;" onclick="shareResultToGroup()">📤 ውጤቴን ለግሩፕ አጋራ (Share to Group)</button>
-        <button id="retakeMissedBtn" class="btn btn-gold" style="display: none; justify-content: center;" onclick="startMissedRetake()">🔄 የተሳሳቱትን ብቻ ደግመው ይሥሩ</button>
-        <button class="btn btn-primary" style="justify-content: center;" onclick="resetToHome()">🏠 ወደ ዋናው ምናሌ ተመለስ</button>
     </div>
 
-    <!-- SCREEN 6: LEADERBOARD -->
+    <!-- LEADERBOARD -->
     <div id="screenLeaderboard" class="screen">
-        <div class="card">
-            <h3>🏆 የከፍተኛ ነጥብ ባለቤቶች</h3>
-            <div id="leaderboardList" style="margin-top: 10px;"></div>
+        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+            <h3 style="margin-bottom:8px;">🏆 ከፍተኛ ነጥብ</h3>
+            <div id="leaderboardList" class="scroll-area"></div>
         </div>
-        <button class="btn btn-primary" style="justify-content: center;" onclick="goBack()">ወደ ዋናው ምናሌ ተመለስ</button>
+        <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
     </div>
 
-    <!-- SCREEN 7: ADMIN DASHBOARD -->
-    <div id="screenAdmin" class="screen">
-        <div class="card">
-            <h3>🛡️ የአድሚን ማዕከል (Admin Control Panel)</h3>
-            <div style="margin: 12px 0; font-size: 0.85rem; line-height: 1.6;">
-                <p>📊 <strong>የተጫዋቾች ስታቲስቲክስ፡</strong></p>
-                <ul style="margin-left: 18px; margin-top: 4px;">
-                    <li>ጠቅላላ የተጫወቱ ተጫዋቾች: <strong id="adminTotalPlayers">1</strong></li>
-                    <li>የተጫኑ ጥያቄዎች ብዛት: <strong id="adminTotalQuestions">0</strong></li>
-                </ul>
-            </div>
-            
-            <button class="btn btn-gold" style="width: 100%; justify-content: center; margin-bottom: 8px;" onclick="triggerFileUpload()">📥 አዲስ የጥያቄ ፋይል አስገባ (JSON Upload)</button>
-            <button class="btn" style="width: 100%; justify-content: center; color: var(--incorrect-red);" onclick="resetWeeklyLeaderboard()">🔄 የሳምንቱን የደረጃ ሰንጠረዥ አድስ (Reset)</button>
+    <!-- ACHIEVEMENTS -->
+    <div id="screenAchievements" class="screen">
+        <div class="card" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+            <h3 style="margin-bottom:8px;">🎖️ ሽልማቶች</h3>
+            <div id="achievementsList" class="scroll-area" style="font-size:0.85rem;"></div>
         </div>
-        <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleFileUpload(event)">
-        <button class="btn btn-primary" style="justify-content: center;" onclick="goBack()">ወደ ዋናው ምናሌ ተመለስ</button>
+        <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="screenAdmin" class="screen">
+        <div class="scroll-area">
+            <div class="card">
+                <h3 style="font-size:0.95rem;">🛡️ የአድሚን ማዕከል</h3>
+                <div style="font-size:0.8rem;margin:10px 0;line-height:1.5;">
+                    <p>📊 ጥያቄዎች: <strong id="adminTotalQuestions">0</strong></p>
+                    <p>👥 ተጫዋቾች: <strong id="adminTotalPlayers">0</strong></p>
+                    <p>📦 የተጫኑ ባንኮች: <strong id="adminBankCount">0</strong></p>
+                </div>
+                <button class="btn btn-gold" style="width:100%;justify-content:center;margin-bottom:7px;" onclick="triggerFileUpload()">📥 JSON አስገባ</button>
+                <button class="btn" style="width:100%;justify-content:center;margin-bottom:7px;" onclick="showBankSelector()">📚 ባንክ ምረጥ</button>
+                <button class="btn" style="width:100%;justify-content:center;color:var(--red);" onclick="resetWeeklyLeaderboard()">🔄 ደረጃ አድስ</button>
+            </div>
+            <div class="card">
+                <h4 style="font-size:0.85rem;margin-bottom:6px;">ተጫዋቾች (Admin only)</h4>
+                <div id="adminPlayerList" class="admin-list"></div>
+            </div>
+        </div>
+        <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleFileUpload(event)">
+        <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="popup" id="achPopup">
+        <div class="popup-card">
+            <div style="font-size:2.5rem;margin-bottom:6px;" id="achIcon">🏆</div>
+            <h3 id="achTitle">ሽልማት!</h3>
+            <p id="achDesc" style="font-size:0.85rem;margin:8px 0;opacity:.9;"></p>
+            <button class="btn btn-gold" style="width:100%;justify-content:center;" onclick="closeAchPopup()">እሺ</button>
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.enableClosingConfirmation();
 
-        // Authorized Admin Telegram User IDs (Abel & Nisiha Gba)
+        // ====== CONFIG ======
         const ADMIN_IDS = [273799643, 6936902038];
-        const currentUserId = tg.initDataUnsafe?.user?.id;
+        const BOT_USERNAME = "YOUR_BOT_USERNAME";   // ← change this
+        // ====================
 
-        // Theme Toggle
-        function toggleTheme() {
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            document.getElementById('themeBtn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
-            localStorage.setItem('ortho_theme', newTheme);
-        }
+        const currentUser = tg.initDataUnsafe?.user || {};
+        const currentUserId = currentUser.id;
+        const isAdmin = ADMIN_IDS.includes(currentUserId);
 
-        // Global Game States
         let screenHistory = ['screenMainMenu'];
-        let activeQuestions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let quizPoints = 0;
-        let currentStreak = 0;
-        let maxStreak = 0;
-        let selectedMainCat = '';
-        let selectedSubCat = '';
-        let timerInterval = null;
-        let questionStartTime = 0;
-        let answerTimes = [];
-        let missedQuestions = [];
+        let activeQuestions = [], currentQuestionIndex = 0;
+        let score = 0, quizPoints = 0, currentStreak = 0, maxStreak = 0;
+        let selectedMainCat = '', selectedSubCat = '';
+        let timerInterval = null, questionStartTime = 0, answerTimes = [], missedQuestions = [];
         let questionBank = [];
+        let activeBankName = 'default';
 
-        let userName = tg.initDataUnsafe?.user?.first_name || "ተጫዋች";
+        // Persistent data
         let totalPoints = parseInt(localStorage.getItem('ortho_total_points') || '0');
+        let unlockedAchievements = JSON.parse(localStorage.getItem('ortho_achievements') || '[]');
+        let lastLogin = localStorage.getItem('ortho_last_login') || '';
+        let categoryMastery = JSON.parse(localStorage.getItem('ortho_mastery') || '{}');
+        let playerRegistry = JSON.parse(localStorage.getItem('ortho_players') || '{}');
+        let questionBanks = JSON.parse(localStorage.getItem('ortho_banks') || '{}');
+
+        const LEVELS = [
+            { min: 0, title: "አዲስ ተማሪ", icon: "🌱" },
+            { min: 500, title: "ተማሪ", icon: "📖" },
+            { min: 1500, title: "ዲያቆን", icon: "🕊️" },
+            { min: 3500, title: "ካህን", icon: "✝️" },
+            { min: 7000, title: "ሊቅ", icon: "👑" },
+            { min: 12000, title: "አባት", icon: "🏛️" }
+        ];
+
+        const ALL_ACHIEVEMENTS = [
+            { id: "first_win", icon: "🎯", title: "መጀመሪያ ድል", desc: "የመጀመሪያ ጥያቄ በትክክል መልስ" },
+            { id: "perfect_5", icon: "💯", title: "ፍጹም 5", desc: "5 ጥያቄ 100% ትክክል" },
+            { id: "perfect_10", icon: "🏆", title: "የ10 ሊቅ", desc: "10 ጥያቄ 100%" },
+            { id: "streak_5", icon: "🔥", title: "5 ተከታታይ", desc: "5 ጊዜ ተከታታይ ትክክል" },
+            { id: "speed_demon", icon: "⚡", title: "የፍጥነት አበጋዝ", desc: "አማካይ ከ5 ሰከንድ በታች" },
+            { id: "level_3", icon: "🕊️", title: "ዲያቆን ደረጃ", desc: "Level 3 ደረስ" },
+            { id: "daily", icon: "📅", title: "ዕለታዊ ተሳትፎ", desc: "ዛሬ ገብተሃል" },
+            { id: "master_one", icon: "📚", title: "ምድብ ጌታ", desc: "አንድ ምድብ 50+ ነጥብ" }
+        ];
 
         window.onload = function() {
-            // Restore theme
-            const savedTheme = localStorage.getItem('ortho_theme') || 'light';
+            const savedTheme = localStorage.getItem('ortho_theme') || 'dark';
             document.body.setAttribute('data-theme', savedTheme);
             document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
 
-            document.getElementById('userNameDisplay').innerText = `👤 ተጫዋች: ${userName}`;
-            updateTotalPointsDisplay();
+            document.getElementById('userNameDisplay').innerText = `👤 ${currentUser.first_name || 'ተጫዋች'}`;
+            updatePointsAndLevel();
             loadQuestionBank();
             updateWeeklySpotlight();
+            checkDailyBonus();
 
-            // Reveal Admin Panel if authorized
-            if (ADMIN_IDS.includes(currentUserId)) {
-                document.getElementById('adminHubBtn').style.display = 'flex';
-            }
+            if (isAdmin) document.getElementById('adminHubBtn').style.display = 'flex';
+
+            // Register player
+            registerPlayer();
         };
 
-        function updateTotalPointsDisplay() {
-            document.getElementById('userTotalPoints').innerText = `⭐ ${totalPoints} ነጥብ`;
+        function registerPlayer() {
+            if (!currentUserId) return;
+            playerRegistry[currentUserId] = {
+                id: currentUserId,
+                name: currentUser.first_name || 'ተጫዋች',
+                username: currentUser.username || '',
+                photo: currentUser.photo_url || '',
+                totalPoints: totalPoints,
+                lastPlayed: new Date().toISOString()
+            };
+            localStorage.setItem('ortho_players', JSON.stringify(playerRegistry));
+        }
+
+        function getLevel(pts) {
+            let lvl = LEVELS[0];
+            for (let i = LEVELS.length - 1; i >= 0; i--) {
+                if (pts >= LEVELS[i].min) { lvl = LEVELS[i]; break; }
+            }
+            const idx = LEVELS.indexOf(lvl);
+            const next = LEVELS[idx + 1];
+            const progress = next ? ((pts - lvl.min) / (next.min - lvl.min)) * 100 : 100;
+            return { ...lvl, levelNum: idx + 1, progress, nextMin: next ? next.min : pts };
+        }
+
+        function updatePointsAndLevel() {
+            document.getElementById('userTotalPoints').innerText = `⭐ ${totalPoints}`;
+            const lv = getLevel(totalPoints);
+            document.getElementById('levelChip').innerText = `Lv.${lv.levelNum}`;
+            document.getElementById('xpText').innerText = `${totalPoints} / ${lv.nextMin}`;
+            document.getElementById('xpFill').style.width = `${Math.min(100, lv.progress)}%`;
             localStorage.setItem('ortho_total_points', totalPoints);
         }
 
-        function loadQuestionBank() {
-            const savedLocal = localStorage.getItem('ortho_question_bank');
-            if (savedLocal) {
-                questionBank = JSON.parse(savedLocal);
-            } else {
-                fetch('questions.json')
-                    .then(res => res.json())
-                    .then(data => {
-                        questionBank = data;
-                        localStorage.setItem('ortho_question_bank', JSON.stringify(data));
-                    })
-                    .catch(() => loadDefaultSampleQuestions());
+        function checkDailyBonus() {
+            const today = new Date().toDateString();
+            if (lastLogin !== today) {
+                lastLogin = today;
+                localStorage.setItem('ortho_last_login', today);
+                totalPoints += 50;
+                updatePointsAndLevel();
+                unlockAchievement('daily');
+                setTimeout(() => showAchPopup('📅', 'ዕለታዊ ቦነስ!', '+50 ነጥብ አግኝተሃል'), 600);
             }
         }
 
-        function loadDefaultSampleQuestions() {
-            questionBank = [
-                {
-                    id: "1",
-                    category: "Amstu_Aemade_Mstirat",
-                    subcategory: "Mstire_Selasie",
-                    question: "ከአምስቱ አእማደ ምስጢራት መካከል የመጀመሪያው ምስጢር የትኛው ነው?",
-                    a: "ምሥጢረ ሥጋዌ",
-                    b: "ምሥጢረ ሥላሴ",
-                    c: "ምሥጢረ ጥምቀት",
-                    d: "ምሥጢረ ቁርባን",
-                    answer: "B",
-                    explanation: "አምስቱ አእማደ ምስጢራት በቅደም ተከተል፡ ምሥጢረ ሥላሴ፣ ምሥጢረ ሥጋዌ፣ ምሥጢረ ጥምቀት፣ ምሥጢረ ቁርባን እና ምሥጢረ ትንሣኤ ሙታን ናቸው።"
+        function toggleTheme() {
+            const cur = document.body.getAttribute('data-theme');
+            const next = cur === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', next);
+            document.getElementById('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('ortho_theme', next);
+        }
+
+        function loadQuestionBank() {
+            if (Object.keys(questionBanks).length > 0) {
+                const names = Object.keys(questionBanks);
+                activeBankName = localStorage.getItem('ortho_active_bank') || names[0];
+                questionBank = questionBanks[activeBankName] || [];
+            } else {
+                const saved = localStorage.getItem('ortho_question_bank');
+                if (saved) {
+                    questionBank = JSON.parse(saved);
+                    questionBanks['default'] = questionBank;
+                    localStorage.setItem('ortho_banks', JSON.stringify(questionBanks));
+                } else {
+                    fetch('questions.json')
+                        .then(r => r.json())
+                        .then(data => {
+                            questionBank = data;
+                            questionBanks['default'] = data;
+                            localStorage.setItem('ortho_banks', JSON.stringify(questionBanks));
+                            localStorage.setItem('ortho_question_bank', JSON.stringify(data));
+                        })
+                        .catch(() => {
+                            questionBank = [{
+                                id: "1", category: "Amstu_Aemade_Mstirat", subcategory: "Mstire_Selasie",
+                                question: "ከአምስቱ አእማደ ምስጢራት መካከል የመጀመሪያው ምስጢር የትኛው ነው?",
+                                a: "ምሥጢረ ሥጋዌ", b: "ምሥጢረ ሥላሴ", c: "ምሥጢረ ጥምቀት", d: "ምሥጢረ ቁርባን",
+                                answer: "B",
+                                explanation: "አምስቱ አእማደ ምስጢራት፡ ምሥጢረ ሥላሴ፣ ምሥጢረ ሥጋዌ፣ ምሥጢረ ጥምቀት፣ ምሥጢረ ቁርባን እና ምሥጢረ ትንሣኤ ሙታን ናቸው።"
+                            }];
+                        });
                 }
-            ];
+            }
         }
 
         // Navigation
-        function navigateTo(screenId) {
+        function navigateTo(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
-            
-            if (screenId !== 'screenMainMenu') {
-                if (screenHistory[screenHistory.length - 1] !== screenId) {
-                    screenHistory.push(screenId);
-                }
+            document.getElementById(id).classList.add('active');
+            if (id !== 'screenMainMenu') {
+                if (screenHistory[screenHistory.length-1] !== id) screenHistory.push(id);
                 document.getElementById('backBar').style.display = 'block';
             } else {
                 screenHistory = ['screenMainMenu'];
                 document.getElementById('backBar').style.display = 'none';
             }
         }
-
         function goBack() {
             if (screenHistory.length > 1) {
                 screenHistory.pop();
-                const prevScreen = screenHistory[screenHistory.length - 1];
+                const prev = screenHistory[screenHistory.length-1];
                 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById(prevScreen).classList.add('active');
-                if (prevScreen === 'screenMainMenu') {
-                    document.getElementById('backBar').style.display = 'none';
-                }
+                document.getElementById(prev).classList.add('active');
+                if (prev === 'screenMainMenu') document.getElementById('backBar').style.display = 'none';
             }
         }
-
-        function openMysteriesMenu() {
-            selectedMainCat = 'Amstu_Aemade_Mstirat';
-            navigateTo('screenMysteriesMenu');
-        }
-
-        function selectMainCategory(catKey) {
-            selectedMainCat = catKey;
-            selectedSubCat = '';
-            document.getElementById('selectedCategoryTitle').innerText = 'ምድብ: ' + getAmharicCategoryName(catKey);
+        function openMysteriesMenu() { selectedMainCat = 'Amstu_Aemade_Mstirat'; navigateTo('screenMysteriesMenu'); }
+        function selectMainCategory(k) {
+            selectedMainCat = k; selectedSubCat = '';
+            document.getElementById('selectedCategoryTitle').innerText = 'ምድብ: ' + getCatName(k);
             navigateTo('screenCountMenu');
         }
-
-        function selectSubCategory(subKey) {
-            selectedSubCat = subKey;
-            document.getElementById('selectedCategoryTitle').innerText = 'ምድብ: ' + getAmharicCategoryName(subKey);
+        function selectSubCategory(k) {
+            selectedSubCat = k;
+            document.getElementById('selectedCategoryTitle').innerText = 'ምድብ: ' + getCatName(k);
             navigateTo('screenCountMenu');
         }
-
-        function getAmharicCategoryName(key) {
-            const names = {
-                'Ye-Tekalale': 'የተቀላቀለ',
-                'Ye-Adminu_Ye-Zare_Tyaqewoch': 'የዛሬ ጥያቄዎች',
-                'Addis_Kidan': 'አዲስ ኪዳን',
-                'Bluy_Kidan': 'ብሉይ ኪዳን',
-                'Amstu_Aemade_Mstirat': 'አምስቱ አእማደ ምስጢራት',
-                'Mstire_Selasie': 'ምሥጢረ ሥላሴ',
-                'Mstire_Sigawe': 'ምሥጢረ ሥጋዌ',
-                'Mstire_Timket': 'ምሥጢረ ጥምቀት',
-                'Mstire_Qurban': 'ምሥጢረ ቁርባን',
-                'Mstire_Tinsae_Mutan': 'ምሥጢረ ትንሣኤ ሙታን',
-                'Hulumn_qelaql': 'ሁሉንም ቀላቅል',
-                'Negere_Kristos': 'ነገረ ክርስቶስ',
-                'SebatuMstirat': 'ሰባቱ ምስጢራት',
-                'Kidusan_ena_Emebetachin': 'ቅዱሳን እና እመቤታችን',
-                'Abew_Kidusan': 'አበው ቅዱሳን',
-                'Tarikoch': 'ታሪኮች',
-                'Trguame': 'ትርጓሜ',
-                'Orthodox_Dogma_Srate_Betekristian': 'ኦርቶዶክስ ዶግማ እና ሥርዓት',
-                'Aqabe_Emnet_Protestant': 'አቃቤ እምነት (ፕሮቴስታንት)',
-                'Aqabe_Emnet_Muslim': 'አቃቤ እምነት (ሙስሊም)'
+        function getCatName(key) {
+            const map = {
+                'Ye-Tekalale':'የተቀላቀለ','Ye-Adminu_Ye-Zare_Tyaqewoch':'የዛሬ ጥያቄዎች',
+                'Addis_Kidan':'አዲስ ኪዳን','Bluy_Kidan':'ብሉይ ኪዳን','Amstu_Aemade_Mstirat':'አምስቱ አእማደ ምስጢራት',
+                'Mstire_Selasie':'ምሥጢረ ሥላሴ','Mstire_Sigawe':'ምሥጢረ ሥጋዌ','Mstire_Timket':'ምሥጢረ ጥምቀት',
+                'Mstire_Qurban':'ምሥጢረ ቁርባን','Mstire_Tinsae_Mutan':'ምሥጢረ ትንሣኤ','Hulumn_qelaql':'ሁሉንም ቀላቅል',
+                'Negere_Kristos':'ነገረ ክርስቶስ','SebatuMstirat':'ሰባቱ ምስጢራት','Kidusan_ena_Emebetachin':'ቅዱሳን እና እመቤታችን',
+                'Abew_Kidusan':'አበው ቅዱሳን','Tarikoch':'ታሪኮች','Trguame':'ትርጓሜ',
+                'Orthodox_Dogma_Srate_Betekristian':'ዶግማ እና ሥርዓት','Aqabe_Emnet_Protestant':'አቃቤ እምነት (ፕሮቴስታንት)',
+                'Aqabe_Emnet_Muslim':'አቃቤ እምነት (ሙስሊም)'
             };
-            return names[key] || key;
+            return map[key] || key;
         }
 
-        // Quiz Logic
+        // Quiz
         function startQuiz(countReq) {
             let filtered = questionBank.filter(q => {
                 if (selectedSubCat) {
@@ -658,24 +552,15 @@
                 if (selectedMainCat === 'Ye-Tekalale') return true;
                 return q.category === selectedMainCat;
             });
-
             if (filtered.length === 0) {
-                alert("ለዚህ ምድብ እስካሁን የተጫኑ ጥያቄዎች የሉም! እባክዎን አድሚኑ ጥያቄዎችን እስኪያገባ ይጠብቁ።");
+                tg.showAlert('ለዚህ ምድብ ጥያቄ የለም። አድሚኑ እስኪያስገባ ይጠብቁ።');
                 return;
             }
-
             filtered.sort(() => Math.random() - 0.5);
-            let count = (countReq === 'random' || countReq > filtered.length) ? filtered.length : countReq;
+            const count = (countReq === 'random' || countReq > filtered.length) ? filtered.length : countReq;
             activeQuestions = filtered.slice(0, count);
-
-            currentQuestionIndex = 0;
-            score = 0;
-            quizPoints = 0;
-            currentStreak = 0;
-            maxStreak = 0;
-            answerTimes = [];
-            missedQuestions = [];
-
+            currentQuestionIndex = 0; score = 0; quizPoints = 0;
+            currentStreak = 0; maxStreak = 0; answerTimes = []; missedQuestions = [];
             navigateTo('screenQuiz');
             renderQuestion();
         }
@@ -684,176 +569,166 @@
             clearInterval(timerInterval);
             document.getElementById('nextQuestionBtn').style.display = 'none';
             document.getElementById('explanationBox').style.display = 'none';
-
             const q = activeQuestions[currentQuestionIndex];
-            document.getElementById('quizProgressText').innerText = `ጥያቄ ${currentQuestionIndex + 1} / ${activeQuestions.length}`;
-            document.getElementById('quizCategoryBadge').innerText = getAmharicCategoryName(q.subcategory || q.category);
+            document.getElementById('quizProgressText').innerText = `\( {currentQuestionIndex+1}/ \){activeQuestions.length}`;
+            document.getElementById('quizCategoryBadge').innerText = getCatName(q.subcategory || q.category);
             document.getElementById('questionText').innerText = q.question;
 
-            const streakBadge = document.getElementById('streakBadge');
+            const badge = document.getElementById('streakBadge');
             if (currentStreak >= 2) {
-                streakBadge.innerText = `🔥 ${currentStreak}x Streak!`;
-                streakBadge.style.display = 'inline-block';
-            } else {
-                streakBadge.style.display = 'none';
-            }
+                badge.innerText = `🔥 ${currentStreak}x`;
+                badge.style.display = 'inline-block';
+            } else badge.style.display = 'none';
 
-            const optsList = document.getElementById('optionsList');
-            optsList.innerHTML = '';
-
-            const options = [
-                { key: 'A', text: q.a },
-                { key: 'B', text: q.b },
-                { key: 'C', text: q.c },
-                { key: 'D', text: q.d }
-            ];
-
-            options.forEach(opt => {
+            const list = document.getElementById('optionsList');
+            list.innerHTML = '';
+            ['A','B','C','D'].forEach(k => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = `${opt.key}. ${opt.text}`;
-                btn.onclick = () => checkAnswer(opt.key, btn);
-                optsList.appendChild(btn);
+                btn.innerText = `${k}. ${q[k.toLowerCase()]}`;
+                btn.onclick = () => checkAnswer(k, btn);
+                list.appendChild(btn);
             });
 
             questionStartTime = Date.now();
             let timeLeft = 20;
-            const timerBar = document.getElementById('timerProgress');
-            timerBar.style.width = '100%';
-
+            const bar = document.getElementById('timerProgress');
+            bar.style.width = '100%';
             timerInterval = setInterval(() => {
                 timeLeft--;
-                timerBar.style.width = `${(timeLeft / 20) * 100}%`;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    checkAnswer('TIMEOUT', null);
-                }
+                bar.style.width = `${(timeLeft/20)*100}%`;
+                if (timeLeft <= 0) { clearInterval(timerInterval); checkAnswer('TIMEOUT', null); }
             }, 1000);
         }
 
-        function checkAnswer(selectedKey, btnElement) {
+        function checkAnswer(selected, btnEl) {
             clearInterval(timerInterval);
             const elapsed = Math.round((Date.now() - questionStartTime) / 1000);
             answerTimes.push(elapsed);
-
             const q = activeQuestions[currentQuestionIndex];
-            const isCorrect = (selectedKey === q.answer);
+            const correct = selected === q.answer;
+            document.querySelectorAll('.option-btn').forEach(b => b.onclick = null);
 
-            const allButtons = document.querySelectorAll('.option-btn');
-            allButtons.forEach(b => b.onclick = null);
-
-            if (isCorrect) {
-                score++;
-                currentStreak++;
+            if (correct) {
+                score++; currentStreak++;
                 if (currentStreak > maxStreak) maxStreak = currentStreak;
-
-                let speedBonus = Math.max(0, 20 - elapsed) * 2.5;
-                let multiplier = currentStreak >= 3 ? 1.5 : 1;
-                let pointsEarned = Math.round((100 + speedBonus) * multiplier);
-                quizPoints += pointsEarned;
-
-                if (btnElement) btnElement.classList.add('correct');
+                const speedBonus = Math.max(0, 20 - elapsed) * 2.5;
+                const mult = currentStreak >= 3 ? 1.5 : 1;
+                quizPoints += Math.round((100 + speedBonus) * mult);
+                if (btnEl) btnEl.classList.add('correct');
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                if (score === 1) unlockAchievement('first_win');
+                if (currentStreak >= 5) unlockAchievement('streak_5');
             } else {
                 currentStreak = 0;
                 missedQuestions.push(q);
-                if (btnElement) btnElement.classList.add('incorrect');
-                allButtons.forEach(b => {
+                if (btnEl) btnEl.classList.add('incorrect');
+                document.querySelectorAll('.option-btn').forEach(b => {
                     if (b.innerText.startsWith(q.answer)) b.classList.add('correct');
                 });
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
             }
-
             if (q.explanation) {
                 document.getElementById('explanationText').innerText = q.explanation;
                 document.getElementById('explanationBox').style.display = 'block';
             }
-
             document.getElementById('nextQuestionBtn').style.display = 'flex';
         }
 
         function nextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < activeQuestions.length) {
-                renderQuestion();
-            } else {
-                showFinalResults();
-            }
+            if (currentQuestionIndex < activeQuestions.length) renderQuestion();
+            else showFinalResults();
         }
 
         function showFinalResults() {
             navigateTo('screenResults');
-            
             const total = activeQuestions.length;
             const accuracy = Math.round((score / total) * 100);
-            
             totalPoints += quizPoints;
-            updateTotalPointsDisplay();
-            saveLeaderboardScore(userName, quizPoints);
+            updatePointsAndLevel();
+            saveLeaderboardScore();
             updateWeeklySpotlight();
+            registerPlayer();
 
-            document.getElementById('finalScoreBadge').innerText = `${score} / ${total}`;
-            document.getElementById('pointsEarnedText').innerText = `+${quizPoints} ነጥብ አግኝተዋል!`;
+            // Mastery
+            const catKey = selectedSubCat || selectedMainCat;
+            categoryMastery[catKey] = (categoryMastery[catKey] || 0) + quizPoints;
+            localStorage.setItem('ortho_mastery', JSON.stringify(categoryMastery));
+            if (categoryMastery[catKey] >= 50) unlockAchievement('master_one');
+
+            document.getElementById('finalScoreBadge').innerText = `\( {score}/ \){total}`;
+            document.getElementById('pointsEarnedText').innerText = `+${quizPoints} ነጥብ`;
             document.getElementById('accuracyText').innerText = `ትክክለኛነት: ${accuracy}%`;
-
-            const totalTime = answerTimes.reduce((a, b) => a + b, 0);
-            const avgTime = Math.round(totalTime / total);
-            const maxTime = Math.max(...answerTimes);
-
+            const totalTime = answerTimes.reduce((a,b)=>a+b,0);
             document.getElementById('totalTimeText').innerText = `${totalTime}s`;
-            document.getElementById('avgTimeText').innerText = `${avgTime}s`;
-            document.getElementById('maxTimeText').innerText = `${maxTime}s`;
+            document.getElementById('avgTimeText').innerText = `${Math.round(totalTime/total)}s`;
+            document.getElementById('maxStreakText').innerText = maxStreak;
 
-            const badgesBox = document.getElementById('badgesContainer');
-            badgesBox.innerHTML = '';
-            if (accuracy === 100) badgesBox.innerHTML += `<span class="badge-chip">🏆 የ100% ሊቅ</span>`;
-            if (avgTime <= 5) badgesBox.innerHTML += `<span class="badge-chip">⚡ የፍጥነት አበጋዝ</span>`;
-            if (maxStreak >= 3) badgesBox.innerHTML += `<span class="badge-chip">🔥 የጽናት ተጋዳላይ</span>`;
+            const box = document.getElementById('badgesContainer');
+            box.innerHTML = '';
+            if (accuracy === 100) {
+                box.innerHTML += `<span class="badge-chip">🏆 100%</span>`;
+                if (total >= 5) unlockAchievement('perfect_5');
+                if (total >= 10) unlockAchievement('perfect_10');
+            }
+            if (Math.round(totalTime/total) <= 5) {
+                box.innerHTML += `<span class="badge-chip">⚡ ፍጥነት</span>`;
+                unlockAchievement('speed_demon');
+            }
+            if (maxStreak >= 3) box.innerHTML += `<span class="badge-chip">🔥 Streak</span>`;
+
+            const lv = getLevel(totalPoints);
+            if (lv.levelNum >= 3) unlockAchievement('level_3');
 
             if (accuracy === 100 && typeof confetti === 'function') {
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                confetti({ particleCount: 90, spread: 65, origin: { y: 0.6 } });
             }
 
-            if (missedQuestions.length > 0) {
-                document.getElementById('retakeMissedBtn').style.display = 'flex';
-            } else {
-                document.getElementById('retakeMissedBtn').style.display = 'none';
-            }
-
-            let msg = "🌟 በጣም ጥሩ! ትምህርቱን በርትተው ቀጥሉ።";
-            if (accuracy === 100) msg = "🏆 ድንቅ ነው! ሙሉ በሙሉ በትክክል መልሰዋል።";
-            else if (accuracy < 50) msg = "💪 ተስፋ አትቁረጡ! የተሳሳቱትን ደግመው በመሥራት እውቀትዎን ያጠናክሩ።";
+            document.getElementById('retakeMissedBtn').style.display = missedQuestions.length ? 'flex' : 'none';
+            let msg = '🌟 በጣም ጥሩ! ቀጥሉ።';
+            if (accuracy === 100) msg = '🏆 ድንቅ! ሙሉ በሙሉ ትክክል።';
+            else if (accuracy < 50) msg = '💪 ተስፋ አትቁረጡ! ደግመው ይሥሩ።';
             document.getElementById('feedbackMessage').innerText = msg;
+
+            // AUTO SEND TO BOT (bot will post to group)
+            autoSendScore(accuracy, total);
         }
 
-        // Automatic Group Share Feature
+        function autoSendScore(accuracy, total) {
+            const achText = unlockedAchievements.slice(-3).map(id => {
+                const a = ALL_ACHIEVEMENTS.find(x => x.id === id);
+                return a ? a.icon + ' ' + a.title : '';
+            }).filter(Boolean).join(' • ');
+
+            const payload = {
+                type: 'score',
+                name: currentUser.first_name || 'ተጫዋች',
+                userId: currentUserId,
+                category: getCatName(selectedSubCat || selectedMainCat),
+                score, total, accuracy,
+                points: quizPoints,
+                maxStreak,
+                level: getLevel(totalPoints).levelNum,
+                achievements: achText,
+                botUsername: BOT_USERNAME
+            };
+            try {
+                tg.sendData(JSON.stringify(payload));
+            } catch (e) { console.log('sendData not available outside Telegram'); }
+        }
+
         function shareResultToGroup() {
-            const botUsername = "YOUR_BOT_USERNAME"; // Replace with your bot handle without @
-            const categoryName = getAmharicCategoryName(selectedSubCat || selectedMainCat);
-            const total = activeQuestions.length;
-            const accuracy = Math.round((score / total) * 100);
-
-            const shareText = `🏆 የኦርቶዶክስ ተዋሕዶ ትምህርት የጨዋታ ውጤቴ!\n\n` +
-                `👤 ተጫዋች: ${userName}\n` +
-                `📚 ምድብ: ${categoryName}\n` +
-                `🎯 ውጤት: ${score}/${total} (${accuracy}%)\n` +
-                `⭐ ያገኘሁት ነጥብ: ${quizPoints}\n` +
-                `🔥 Max Streak: ${maxStreak}x\n\n` +
-                `እንኳን ለኦርቶዶክስ ተዋሕዶ ሃይማኖታችን እውቀት አበቃን! 🙏\n` +
-                `የእኔን ሪከርድ መስበር ትችላላችሁ? ከታች ያለውን ቦት በመንካት ይወዳደሩ! 👇`;
-
-            const telegramShareUrl = `https://t.me/share/url?url=https://t.me/${botUsername}&text=${encodeURIComponent(shareText)}`;
-            tg.openTelegramLink(telegramShareUrl);
+            const accuracy = Math.round((score / activeQuestions.length) * 100);
+            const text = `🏆 የኦርቶዶክስ ተዋሕዶ ውጤቴ!\n\n👤 ${currentUser.first_name||'ተጫዋች'}\n📚 ${getCatName(selectedSubCat||selectedMainCat)}\n🎯 \( {score}/ \){activeQuestions.length} (\( {accuracy}%)\n⭐ + \){quizPoints} ነጥብ\n🔥 Max Streak: ${maxStreak}x\n\nተወዳደሩ 👇`;
+            const url = `https://t.me/share/url?url=https://t.me/\( {BOT_USERNAME}&text= \){encodeURIComponent(text)}`;
+            tg.openTelegramLink(url);
         }
 
         function startMissedRetake() {
             activeQuestions = [...missedQuestions];
-            currentQuestionIndex = 0;
-            score = 0;
-            quizPoints = 0;
-            currentStreak = 0;
-            answerTimes = [];
-            missedQuestions = [];
+            currentQuestionIndex = 0; score = 0; quizPoints = 0;
+            currentStreak = 0; answerTimes = []; missedQuestions = [];
             navigateTo('screenQuiz');
             renderQuestion();
         }
@@ -863,22 +738,30 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screenMainMenu').classList.add('active');
             document.getElementById('backBar').style.display = 'none';
+            updateWeeklySpotlight();
         }
 
-        // Leaderboard & Weekly Spotlight
-        function saveLeaderboardScore(name, pts) {
+        // Leaderboard
+        function saveLeaderboardScore() {
             let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-            board.push({ name: name, points: pts, date: new Date().toLocaleDateString('am-ET') });
-            board.sort((a, b) => b.points - a.points);
-            board = board.slice(0, 10);
+            board.push({
+                id: currentUserId,
+                name: currentUser.first_name || 'ተጫዋች',
+                username: currentUser.username || '',
+                photo: currentUser.photo_url || '',
+                points: quizPoints,
+                date: new Date().toLocaleDateString('am-ET')
+            });
+            board.sort((a,b) => b.points - a.points);
+            board = board.slice(0, 15);
             localStorage.setItem('ortho_leaderboard', JSON.stringify(board));
         }
 
         function updateWeeklySpotlight() {
-            let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-            if (board.length > 0) {
+            const board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
+            if (board.length) {
                 document.getElementById('weeklyHeroName').innerText = board[0].name;
-                document.getElementById('weeklyHeroScore').innerText = `${board[0].points} ነጥብ`;
+                document.getElementById('weeklyHeroScore').innerText = board[0].points + ' ነጥብ';
             }
         }
 
@@ -886,64 +769,141 @@
             navigateTo('screenLeaderboard');
             const list = document.getElementById('leaderboardList');
             list.innerHTML = '';
-            let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-
-            if (board.length === 0) {
-                list.innerHTML = '<p style="text-align:center; opacity:0.7;">እስካሁን ምንም የተመዘገበ ከፍተኛ ነጥብ የለም።</p>';
+            const board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
+            if (!board.length) {
+                list.innerHTML = '<p style="text-align:center;opacity:.7;padding:20px;">እስካሁን ውጤት የለም</p>';
                 return;
             }
-
-            board.forEach((item, index) => {
+            board.forEach((item, i) => {
                 const row = document.createElement('div');
                 row.className = 'leaderboard-item';
-                row.innerHTML = `<span>#${index + 1} <strong>${item.name}</strong></span> <span>⭐ ${item.points} ነጥብ</span>`;
+                const avatar = item.photo
+                    ? `<img src="${item.photo}" alt="">`
+                    : '👤';
+                const namePart = isAdmin && item.username
+                    ? `<span style="cursor:pointer;text-decoration:underline;" onclick="tg.openTelegramLink('https://t.me/\( {item.username}')"> \){item.name}</span>`
+                    : `<strong>${item.name}</strong>`;
+                row.innerHTML = `
+                    <div class="lb-avatar">${avatar}</div>
+                    <div style="flex:1;">
+                        <div>#${i+1} ${namePart}</div>
+                        <div style="font-size:0.72rem;opacity:.7;">${item.date || ''}</div>
+                    </div>
+                    <div style="font-weight:700;color:var(--gold);">⭐ ${item.points}</div>
+                `;
                 list.appendChild(row);
             });
         }
 
-        // Admin Dashboard Functions
+        // Achievements
+        function unlockAchievement(id) {
+            if (unlockedAchievements.includes(id)) return;
+            unlockedAchievements.push(id);
+            localStorage.setItem('ortho_achievements', JSON.stringify(unlockedAchievements));
+            const a = ALL_ACHIEVEMENTS.find(x => x.id === id);
+            if (a) setTimeout(() => showAchPopup(a.icon, a.title, a.desc), 400);
+        }
+        function showAchPopup(icon, title, desc) {
+            document.getElementById('achIcon').innerText = icon;
+            document.getElementById('achTitle').innerText = title;
+            document.getElementById('achDesc').innerText = desc;
+            document.getElementById('achPopup').classList.add('show');
+        }
+        function closeAchPopup() { document.getElementById('achPopup').classList.remove('show'); }
+
+        function openAchievements() {
+            navigateTo('screenAchievements');
+            const list = document.getElementById('achievementsList');
+            list.innerHTML = '';
+            ALL_ACHIEVEMENTS.forEach(a => {
+                const unlocked = unlockedAchievements.includes(a.id);
+                const div = document.createElement('div');
+                div.style.cssText = `display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);opacity:${unlocked?1:0.4}`;
+                div.innerHTML = `
+                    <div style="font-size:1.6rem;">${a.icon}</div>
+                    <div>
+                        <div style="font-weight:700;">${a.title}</div>
+                        <div style="font-size:0.75rem;opacity:.8;">${a.desc}</div>
+                    </div>
+                    <div style="margin-left:auto;">${unlocked ? '✅' : '🔒'}</div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // Admin
         function openAdminHub() {
             navigateTo('screenAdmin');
             document.getElementById('adminTotalQuestions').innerText = questionBank.length;
-            let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-            document.getElementById('adminTotalPlayers').innerText = Math.max(1, board.length);
+            document.getElementById('adminTotalPlayers').innerText = Object.keys(playerRegistry).length;
+            document.getElementById('adminBankCount').innerText = Object.keys(questionBanks).length;
+
+            const list = document.getElementById('adminPlayerList');
+            list.innerHTML = '';
+            Object.values(playerRegistry).sort((a,b)=>b.totalPoints-a.totalPoints).forEach(p => {
+                const row = document.createElement('div');
+                row.className = 'admin-row';
+                row.innerHTML = `
+                    <span>${p.name} ${p.username ? '@'+p.username : ''}<br><small style="opacity:.6">ID: ${p.id}</small></span>
+                    <span style="color:var(--gold);font-weight:700;">${p.totalPoints}</span>
+                `;
+                if (p.username) {
+                    row.style.cursor = 'pointer';
+                    row.onclick = () => tg.openTelegramLink('https://t.me/' + p.username);
+                }
+                list.appendChild(row);
+            });
         }
 
         function resetWeeklyLeaderboard() {
-            if (confirm("እርግጠኛ ነዎት የሳምንቱን ደረጃ ሰንጠረዥ ማደስ ይፈልጋሉ?")) {
+            if (confirm('የሳምንቱን ደረጃ ሰንጠረዥ ማደስ ይፈልጋሉ?')) {
                 localStorage.removeItem('ortho_leaderboard');
                 updateWeeklySpotlight();
-                alert("የደረጃ ሰንጠረዡ በሁኔታው ተ obnovlen!");
+                tg.showAlert('ተደስቷል');
                 goBack();
             }
         }
 
-        function triggerFileUpload() {
-            document.getElementById('jsonFileInput').click();
-        }
+        function triggerFileUpload() { document.getElementById('jsonFileInput').click(); }
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function(ev) {
                 try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (Array.isArray(importedData)) {
-                        questionBank = importedData;
-                        localStorage.setItem('ortho_question_bank', JSON.stringify(importedData));
-                        alert(`በትክክል ተጫኗል! ${importedData.length} ጥያቄዎች ገብተዋል።`);
-                        document.getElementById('adminTotalQuestions').innerText = importedData.length;
-                    } else {
-                        alert("የፋይሉ ቅርጽ ትክክል አይደለም! JSON Array መሆን አለበት።");
-                    }
+                    const data = JSON.parse(ev.target.result);
+                    if (!Array.isArray(data)) { tg.showAlert('JSON Array መሆን አለበት'); return; }
+                    const name = file.name.replace('.json','') + '_' + Date.now().toString().slice(-4);
+                    questionBanks[name] = data;
+                    localStorage.setItem('ortho_banks', JSON.stringify(questionBanks));
+                    questionBank = data;
+                    activeBankName = name;
+                    localStorage.setItem('ortho_active_bank', name);
+                    localStorage.setItem('ortho_question_bank', JSON.stringify(data));
+                    tg.showAlert(`✅ ${data.length} ጥያቄ ተጭኗል\nባንክ: ${name}`);
+                    document.getElementById('adminTotalQuestions').innerText = data.length;
+                    document.getElementById('adminBankCount').innerText = Object.keys(questionBanks).length;
                 } catch (err) {
-                    alert("ፋይሉን ማንበብ አልተቻለም። እባክዎን የJSON ቅርጹን ያረጋግጡ።");
+                    tg.showAlert('ፋይሉን ማንበብ አልተቻለም');
                 }
             };
             reader.readAsText(file);
         }
+
+        function showBankSelector() {
+            const names = Object.keys(questionBanks);
+            if (!names.length) { tg.showAlert('ባንክ የለም'); return; }
+            const choice = prompt('ባንክ ምረጥ:\n' + names.map((n,i)=>`${i+1}. \( {n} ( \){questionBanks[n].length})`).join('\n'));
+            const idx = parseInt(choice) - 1;
+            if (idx >= 0 && idx < names.length) {
+                activeBankName = names[idx];
+                questionBank = questionBanks[activeBankName];
+                localStorage.setItem('ortho_active_bank', activeBankName);
+                localStorage.setItem('ortho_question_bank', JSON.stringify(questionBank));
+                tg.showAlert('ባንክ ተቀይሯል: ' + activeBankName);
+            }
+        }
     </script>
 </body>
-</html>
+                                                                                              </html>
