@@ -9,24 +9,25 @@
     <style>
         :root {
             --gold: #D4AF37;
-            --gold-dark: #B78103;
-            --navy: #0B1C2C;
-            --navy-light: #1A365D;
-            --card: #152536;
-            --text: #F0E6D2;
-            --muted: #A0AEC0;
-            --green: #2E7D32;
-            --red: #C62828;
-            --orange: #FF6D00;
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --gold-light: #F6E05E;
+            --navy: #0B1426;
+            --navy2: #132040;
+            --card: #1A2744;
+            --text: #F5F0E6;
+            --muted: #94A3B8;
+            --green: #22C55E;
+            --red: #EF4444;
+            --orange: #F97316;
+            --safe: env(safe-area-inset-bottom, 0px);
         }
         [data-theme="light"] {
-            --navy: #F0F4F8;
-            --navy-light: #1A365D;
+            --navy: #F1F5F9;
+            --navy2: #E2E8F0;
             --card: #FFFFFF;
-            --text: #1A202C;
-            --muted: #718096;
+            --text: #0F172A;
+            --muted: #64748B;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             background: var(--navy);
@@ -36,124 +37,175 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: background .3s;
         }
+
+        /* Header */
         header {
             flex-shrink: 0;
-            background: linear-gradient(135deg, #0B1C2C, #1A365D);
-            color: white;
+            background: linear-gradient(135deg, #0B1426 0%, #1E3A5F 100%);
+            padding: 12px 14px 10px;
             text-align: center;
-            padding: 10px 12px 8px;
             border-bottom: 3px solid var(--gold);
             position: relative;
         }
-        [data-theme="light"] header { background: linear-gradient(135deg, #1A365D, #2C5282); }
-        header h1 { font-size: 1.05rem; color: var(--gold); margin-bottom: 1px; }
-        header p { font-size: 0.72rem; opacity: .85; }
+        [data-theme="light"] header { background: linear-gradient(135deg, #1E3A5F, #2B4C7E); }
+        header h1 { font-size: 1.08rem; color: var(--gold); font-weight: 700; letter-spacing: 0.3px; }
+        header p { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
         .theme-btn {
-            position: absolute; top: 8px; right: 10px;
-            background: rgba(255,255,255,.15); border: none; color: white;
-            width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+            position: absolute; top: 10px; right: 12px;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.12); border: none; color: white;
+            font-size: 1.15rem; display: flex; align-items: center; justify-content: center;
         }
+
+        /* User bar */
         .user-bar {
             flex-shrink: 0;
+            margin: 8px 10px 0;
+            background: var(--card);
+            border-radius: 14px;
+            padding: 9px 12px;
             display: flex; justify-content: space-between; align-items: center;
-            background: var(--card); margin: 8px 10px 0; padding: 8px 12px;
-            border-radius: 12px; border: 1px solid rgba(212,175,55,.3);
-            font-size: 0.82rem; font-weight: 600;
+            border: 1px solid rgba(212,175,55,0.25);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .level-chip {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #0B1C2C; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700;
+        .user-bar .name { font-size: 0.84rem; font-weight: 600; }
+        .level-badge {
+            background: linear-gradient(135deg, var(--gold), #B8860B);
+            color: #0B1426; font-size: 0.68rem; font-weight: 800;
+            padding: 3px 9px; border-radius: 20px;
         }
+        .points { font-size: 0.82rem; font-weight: 700; color: var(--gold); }
+
+        /* Back */
         .back-bar { flex-shrink: 0; padding: 4px 10px; display: none; }
         .back-btn {
-            background: rgba(255,255,255,.08); color: var(--text); border: none;
-            padding: 6px 12px; border-radius: 8px; font-weight: 600; font-size: 0.8rem;
+            background: rgba(255,255,255,0.08); border: none; color: var(--text);
+            padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
         }
-        .screen {
-            display: none; flex-direction: column; flex: 1; overflow: hidden;
-            padding: 8px 10px calc(10px + var(--safe-bottom));
-        }
+
+        /* Screens */
+        .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; padding: 8px 10px calc(8px + var(--safe)); }
         .screen.active { display: flex; }
-        .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+        .scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+        /* Cards & Buttons */
         .card {
-            background: var(--card); border-radius: 14px; padding: 12px;
-            border: 1px solid rgba(212,175,55,.25); margin-bottom: 8px;
+            background: var(--card);
+            border-radius: 14px;
+            padding: 12px;
+            border: 1px solid rgba(212,175,55,0.2);
+            margin-bottom: 8px;
         }
         .btn {
-            background: var(--card); color: var(--text); border: 1.5px solid rgba(212,175,55,.3);
-            padding: 11px 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 600;
-            text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-            transition: transform .12s;
-        }
-        .btn:active { transform: scale(.97); }
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #0B1C2C; border: none; font-weight: 700;
-        }
-        .btn-primary { background: var(--navy-light); color: white; border: none; justify-content: center; }
-        .btn-share { background: linear-gradient(135deg, #0088cc, #006699); color: white; border: none; justify-content: center; }
-        .category-grid { display: flex; flex-direction: column; gap: 7px; }
-        .hero-banner {
-            background: linear-gradient(135deg, rgba(212,175,55,.18), rgba(26,54,93,.1));
-            border: 1px solid var(--gold); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px;
+            background: var(--card);
+            color: var(--text);
+            border: 1.5px solid rgba(212,175,55,0.28);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
             display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
-        .quiz-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
-        .streak-badge { background: #3A1C00; color: var(--orange); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; display: none; }
-        .timer-bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
-        .timer-progress { height: 100%; background: var(--green); width: 100%; transition: width 1s linear; }
-        .question-text { font-size: 1.02rem; font-weight: 600; line-height: 1.45; margin-bottom: 12px; }
-        .options-list { display: flex; flex-direction: column; gap: 7px; }
-        .option-btn {
-            background: var(--card); color: var(--text); border: 1.5px solid rgba(212,175,55,.3);
-            padding: 11px; border-radius: 10px; text-align: left; font-size: 0.88rem; font-weight: 500;
+        .btn:active { transform: scale(0.97); }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #B8860B);
+            color: #0B1426; border: none; font-weight: 700;
         }
-        .option-btn.correct { background: #1B3A1B !important; border-color: var(--green) !important; color: #A5D6A7 !important; }
-        .option-btn.incorrect { background: #3A1B1B !important; border-color: var(--red) !important; color: #EF9A9A !important; }
-        [data-theme="light"] .option-btn.correct { background: #E8F5E9 !important; color: var(--green) !important; }
-        [data-theme="light"] .option-btn.incorrect { background: #FFEBEE !important; color: var(--red) !important; }
-        .explanation-box {
-            margin-top: 10px; padding: 9px 11px; background: rgba(212,175,55,.12);
-            border-left: 4px solid var(--gold); border-radius: 8px; font-size: 0.8rem; display: none;
+        .btn-primary {
+            background: #1E3A5F; color: white; border: none; justify-content: center;
         }
-        .results-summary { text-align: center; padding: 14px 6px; }
-        .score-badge { font-size: 2.1rem; font-weight: 800; color: var(--gold); margin: 4px 0; }
-        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 10px 0; font-size: 0.72rem; text-align: center; }
-        .stats-row div { background: rgba(0,0,0,.15); padding: 6px 4px; border-radius: 8px; }
-        .badges-row { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 8px 0; }
-        .badge-chip {
-            background: rgba(212,175,55,.2); border: 1px solid var(--gold); color: var(--text);
-            padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;
+        .btn-share {
+            background: linear-gradient(135deg, #0EA5E9, #0284C7);
+            color: white; border: none; justify-content: center;
         }
-        .leaderboard-item {
-            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
-            background: rgba(0,0,0,.12); border-radius: 10px; margin-bottom: 6px;
-            border-left: 3px solid var(--gold); font-size: 0.85rem;
+        .grid { display: flex; flex-direction: column; gap: 7px; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(30,58,95,0.3));
+            border: 1px solid rgba(212,175,55,0.4);
+            border-radius: 14px;
+            padding: 11px 13px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px;
         }
+        .hero-label { font-size: 0.68rem; font-weight: 700; color: var(--gold); }
+        .hero-name { font-weight: 700; font-size: 0.92rem; margin-top: 1px; }
+        .hero-score { font-size: 1.05rem; font-weight: 800; color: var(--gold); }
+
+        /* XP */
+        .xp-box { padding: 9px 12px; }
+        .xp-top { display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px; }
+        .xp-bar { height: 7px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
+        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 6px; transition: width 0.4s; }
+
+        /* Quiz */
+        .quiz-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
+        .streak { background: #431407; color: var(--orange); padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; display: none; }
+        .timer-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+        .timer-fill { height: 100%; background: var(--green); width: 100%; transition: width 1s linear, background 0.3s; }
+        .q-text { font-size: 1.02rem; font-weight: 600; line-height: 1.45; margin-bottom: 12px; }
+        .opts { display: flex; flex-direction: column; gap: 7px; }
+        .opt {
+            background: var(--card); color: var(--text);
+            border: 1.5px solid rgba(212,175,55,0.28);
+            padding: 12px; border-radius: 11px; text-align: left;
+            font-size: 0.88rem; font-weight: 500;
+        }
+        .opt.correct { background: #14532D !important; border-color: var(--green) !important; color: #BBF7D0 !important; }
+        .opt.wrong { background: #450A0A !important; border-color: var(--red) !important; color: #FECACA !important; }
+        [data-theme="light"] .opt.correct { background: #DCFCE7 !important; color: #166534 !important; }
+        [data-theme="light"] .opt.wrong { background: #FEE2E2 !important; color: #991B1B !important; }
+        .explain {
+            margin-top: 10px; padding: 9px 11px;
+            background: rgba(212,175,55,0.1); border-left: 4px solid var(--gold);
+            border-radius: 8px; font-size: 0.8rem; display: none;
+        }
+
+        /* Results */
+        .res-score { font-size: 2.2rem; font-weight: 800; color: var(--gold); margin: 6px 0; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 10px 0; }
+        .stat { background: rgba(0,0,0,0.18); border-radius: 10px; padding: 7px 4px; text-align: center; font-size: 0.72rem; }
+        .badges { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 8px 0; }
+        .chip { background: rgba(212,175,55,0.18); border: 1px solid var(--gold); padding: 3px 9px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; }
+
+        /* Leaderboard */
+        .lb-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 11px; background: rgba(0,0,0,0.15);
+            border-radius: 11px; margin-bottom: 6px;
+            border-left: 3px solid var(--gold);
+        }
+        .lb-rank { font-weight: 800; width: 28px; text-align: center; font-size: 0.95rem; }
         .lb-avatar {
-            width: 36px; height: 36px; border-radius: 50%; background: var(--navy-light);
-            display: flex; align-items: center; justify-content: center; font-size: 1.1rem; overflow: hidden; flex-shrink: 0;
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--navy2); display: flex; align-items: center; justify-content: center;
+            overflow: hidden; flex-shrink: 0; font-size: 1.2rem;
         }
         .lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .progress-ring { width: 56px; height: 56px; }
-        .xp-bar { height: 6px; background: rgba(255,255,255,.12); border-radius: 4px; overflow: hidden; margin-top: 4px; }
-        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #F6E05E); border-radius: 4px; }
-        .mastery-bar { height: 5px; background: rgba(255,255,255,.1); border-radius: 3px; margin-top: 3px; }
-        .mastery-fill { height: 100%; background: var(--gold); border-radius: 3px; }
+
+        /* Popup */
         .popup {
-            position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none;
-            align-items: center; justify-content: center; z-index: 100; padding: 20px;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+            display: none; align-items: center; justify-content: center;
+            z-index: 200; padding: 20px;
         }
         .popup.show { display: flex; }
-        .popup-card {
-            background: var(--card); border-radius: 18px; padding: 20px; max-width: 300px; width: 100%;
-            text-align: center; border: 2px solid var(--gold); animation: popIn .35s ease;
+        .popup-box {
+            background: var(--card); border-radius: 18px; padding: 22px;
+            max-width: 300px; width: 100%; text-align: center;
+            border: 2px solid var(--gold); animation: pop 0.35s ease;
         }
-        @keyframes popIn { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .admin-list { font-size: 0.8rem; max-height: 180px; overflow-y: auto; }
-        .admin-row { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; }
+        @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .admin-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -164,10 +216,10 @@
     </header>
 
     <div class="user-bar">
-        <span id="userNameDisplay">👤 ተጫዋች</span>
+        <span class="name" id="userName">👤 ተጫዋች</span>
         <div style="display:flex;align-items:center;gap:8px;">
-            <span class="level-chip" id="levelChip">Lv.1</span>
-            <span id="userTotalPoints">⭐ 0</span>
+            <span class="level-badge" id="levelBadge">Lv.1</span>
+            <span class="points" id="totalPts">⭐ 0</span>
         </div>
     </div>
 
@@ -175,72 +227,73 @@
         <button class="back-btn" onclick="goBack()">⬅️ ተመለስ</button>
     </div>
 
-    <!-- MAIN MENU -->
-    <div id="screenMainMenu" class="screen active">
-        <div class="scroll-area">
-            <div class="hero-banner">
+    <!-- MAIN -->
+    <div id="screenMain" class="screen active">
+        <div class="scroll">
+            <div class="hero">
                 <div>
-                    <div style="font-size:0.7rem;font-weight:700;color:var(--gold);">👑 የሳምንቱ ምርጥ</div>
-                    <div id="weeklyHeroName" style="font-weight:700;margin-top:2px;">እስካሁን አልተወሰነም</div>
+                    <div class="hero-label">👑 የሳምንቱ ምርጥ ተጫዋች</div>
+                    <div class="hero-name" id="weeklyName">እስካሁን አልተወሰነም</div>
                 </div>
-                <div id="weeklyHeroScore" style="font-weight:800;color:var(--gold);">0</div>
+                <div class="hero-score" id="weeklyScore">0</div>
             </div>
 
-            <div class="card" style="padding:10px 12px;">
-                <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px;">
-                    <span>XP</span><span id="xpText">0 / 500</span>
+            <div class="card xp-box">
+                <div class="xp-top">
+                    <span id="levelTitle">አዲስ ተማሪ</span>
+                    <span id="xpLabel">0 / 500</span>
                 </div>
                 <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
             </div>
 
-            <div class="category-grid" style="margin-top:6px;">
-                <button class="btn btn-gold" onclick="selectMainCategory('Ye-Tekalale')"><span>🎲 የተቀላቀለ</span></button>
-                <button class="btn" onclick="selectMainCategory('Ye-Adminu_Ye-Zare_Tyaqewoch')"><span>📅 የዛሬ ጥያቄዎች</span></button>
-                <button class="btn" onclick="selectMainCategory('Addis_Kidan')"><span>📖 አዲስ ኪዳን</span></button>
-                <button class="btn" onclick="selectMainCategory('Bluy_Kidan')"><span>📜 ብሉይ ኪዳን</span></button>
-                <button class="btn btn-gold" onclick="openMysteriesMenu()"><span>🏛️ አምስቱ አእማደ ምስጢራት</span></button>
-                <button class="btn" onclick="selectMainCategory('Negere_Kristos')"><span>✝️ ነገረ ክርስቶስ</span></button>
-                <button class="btn" onclick="selectMainCategory('SebatuMstirat')"><span>🕊️ ሰባቱ ምስጢራት</span></button>
-                <button class="btn" onclick="selectMainCategory('Kidusan_ena_Emebetachin')"><span>👑 ቅዱሳን እና እመቤታችን</span></button>
-                <button class="btn" onclick="selectMainCategory('Abew_Kidusan')"><span>👴 አበው ቅዱሳን</span></button>
-                <button class="btn" onclick="selectMainCategory('Tarikoch')"><span>📚 ታሪኮች</span></button>
-                <button class="btn" onclick="selectMainCategory('Trguame')"><span>🔍 ትርጓሜ</span></button>
-                <button class="btn" onclick="selectMainCategory('Orthodox_Dogma_Srate_Betekristian')"><span>⚖️ ዶግማ እና ሥርዓት</span></button>
-                <button class="btn" onclick="selectMainCategory('Aqabe_Emnet_Protestant')"><span>🛡️ አቃቤ እምነት (ፕሮቴስታንት)</span></button>
-                <button class="btn" onclick="selectMainCategory('Aqabe_Emnet_Muslim')"><span>🛡️ አቃቤ እምነት (ሙስሊም)</span></button>
+            <div class="grid" style="margin-top:6px;">
+                <button class="btn btn-gold" onclick="pickCat('Ye-Tekalale')"><span>🎲 የተቀላቀለ</span></button>
+                <button class="btn" onclick="pickCat('Ye-Adminu_Ye-Zare_Tyaqewoch')"><span>📅 የዛሬ ጥያቄዎች</span></button>
+                <button class="btn" onclick="pickCat('Addis_Kidan')"><span>📖 አዲስ ኪዳን</span></button>
+                <button class="btn" onclick="pickCat('Bluy_Kidan')"><span>📜 ብሉይ ኪዳን</span></button>
+                <button class="btn btn-gold" onclick="goMysteries()"><span>🏛️ አምስቱ አእማደ ምስጢራት</span></button>
+                <button class="btn" onclick="pickCat('Negere_Kristos')"><span>✝️ ነገረ ክርስቶስ</span></button>
+                <button class="btn" onclick="pickCat('SebatuMstirat')"><span>🕊️ ሰባቱ ምስጢራት</span></button>
+                <button class="btn" onclick="pickCat('Kidusan_ena_Emebetachin')"><span>👑 ቅዱሳን እና እመቤታችን</span></button>
+                <button class="btn" onclick="pickCat('Abew_Kidusan')"><span>👴 አበው ቅዱሳን</span></button>
+                <button class="btn" onclick="pickCat('Tarikoch')"><span>📚 ታሪኮች</span></button>
+                <button class="btn" onclick="pickCat('Trguame')"><span>🔍 ትርጓሜ</span></button>
+                <button class="btn" onclick="pickCat('Orthodox_Dogma_Srate_Betekristian')"><span>⚖️ ዶግማ እና ሥርዓት</span></button>
+                <button class="btn" onclick="pickCat('Aqabe_Emnet_Protestant')"><span>🛡️ አቃቤ እምነት (ፕሮቴስታንት)</span></button>
+                <button class="btn" onclick="pickCat('Aqabe_Emnet_Muslim')"><span>🛡️ አቃቤ እምነት (ሙስሊም)</span></button>
             </div>
 
             <div style="display:flex;gap:7px;margin-top:10px;">
-                <button class="btn btn-primary" style="flex:1;" onclick="openLeaderboard()">🏆 ደረጃ</button>
-                <button class="btn btn-primary" style="flex:1;" onclick="openAchievements()">🎖️ ሽልማቶች</button>
-                <button id="adminHubBtn" class="btn btn-gold" style="flex:1;display:none;" onclick="openAdminHub()">🛡️ አድሚን</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="openLB()">🏆 ደረጃ</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="openAch()">🎖️ ሽልማት</button>
+                <button id="adminBtn" class="btn btn-gold" style="flex:1;display:none;" onclick="openAdmin()">🛡️ አድሚን</button>
             </div>
         </div>
     </div>
 
     <!-- MYSTERIES -->
-    <div id="screenMysteriesMenu" class="screen">
-        <div class="scroll-area">
+    <div id="screenMyst" class="screen">
+        <div class="scroll">
             <div class="card"><h3 style="font-size:1rem;">🏛️ አምስቱ አእማደ ምስጢራት</h3></div>
-            <div class="category-grid">
-                <button class="btn" onclick="selectSubCategory('Mstire_Selasie')"><span>1️⃣ ምሥጢረ ሥላሴ</span></button>
-                <button class="btn" onclick="selectSubCategory('Mstire_Sigawe')"><span>2️⃣ ምሥጢረ ሥጋዌ</span></button>
-                <button class="btn" onclick="selectSubCategory('Mstire_Timket')"><span>3️⃣ ምሥጢረ ጥምቀት</span></button>
-                <button class="btn" onclick="selectSubCategory('Mstire_Qurban')"><span>4️⃣ ምሥጢረ ቁርባን</span></button>
-                <button class="btn" onclick="selectSubCategory('Mstire_Tinsae_Mutan')"><span>5️⃣ ምሥጢረ ትንሣኤ</span></button>
-                <button class="btn btn-gold" onclick="selectSubCategory('Hulumn_qelaql')"><span>🎲 ሁሉንም ቀላቅል</span></button>
+            <div class="grid">
+                <button class="btn" onclick="pickSub('Mstire_Selasie')"><span>1️⃣ ምሥጢረ ሥላሴ</span></button>
+                <button class="btn" onclick="pickSub('Mstire_Sigawe')"><span>2️⃣ ምሥጢረ ሥጋዌ</span></button>
+                <button class="btn" onclick="pickSub('Mstire_Timket')"><span>3️⃣ ምሥጢረ ጥምቀት</span></button>
+                <button class="btn" onclick="pickSub('Mstire_Qurban')"><span>4️⃣ ምሥጢረ ቁርባን</span></button>
+                <button class="btn" onclick="pickSub('Mstire_Tinsae_Mutan')"><span>5️⃣ ምሥጢረ ትንሣኤ</span></button>
+                <button class="btn btn-gold" onclick="pickSub('Hulumn_qelaql')"><span>🎲 ሁሉንም ቀላቅል</span></button>
             </div>
         </div>
     </div>
 
     <!-- COUNT -->
-    <div id="screenCountMenu" class="screen">
-        <div class="scroll-area">
+    <div id="screenCount" class="screen">
+        <div class="scroll">
             <div class="card">
-                <h3 id="selectedCategoryTitle" style="font-size:0.95rem;">ምድብ</h3>
-                <p style="font-size:0.75rem;opacity:.8;margin-top:3px;">ስንት ጥያቄ?</p>
+                <h3 id="catTitle" style="font-size:0.95rem;">ምድብ</h3>
+                <p style="font-size:0.75rem;opacity:0.8;margin-top:3px;">ስንት ጥያቄ መስራት ይፈልጋሉ?</p>
             </div>
-            <div class="category-grid">
+            <div class="grid">
                 <button class="btn" onclick="startQuiz(5)"><span>5 ጥያቄ ⚡</span></button>
                 <button class="btn" onclick="startQuiz(10)"><span>10 ጥያቄ 🎯</span></button>
                 <button class="btn" onclick="startQuiz(20)"><span>20 ጥያቄ 🔥</span></button>
@@ -253,657 +306,602 @@
 
     <!-- QUIZ -->
     <div id="screenQuiz" class="screen">
-        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
-            <div class="quiz-header">
-                <span id="quizProgressText">1/10</span>
-                <span id="streakBadge" class="streak-badge">🔥 2x</span>
-                <span id="quizCategoryBadge" style="font-size:0.75rem;opacity:.8;">ምድብ</span>
+        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;">
+            <div class="quiz-top">
+                <span id="qProg">1/10</span>
+                <span class="streak" id="streakBadge">🔥 2x</span>
+                <span id="qCat" style="font-size:0.75rem;opacity:0.8;">ምድብ</span>
             </div>
-            <div class="timer-bar"><div id="timerProgress" class="timer-progress"></div></div>
-            <div id="questionText" class="question-text"></div>
-            <div id="optionsList" class="options-list" style="flex:1;overflow-y:auto;"></div>
-            <div id="explanationBox" class="explanation-box">
+            <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+            <div class="q-text" id="qText"></div>
+            <div class="opts" id="opts" style="flex:1;overflow-y:auto;"></div>
+            <div class="explain" id="explainBox">
                 <strong>💡 ማብራሪያ፡</strong>
-                <p id="explanationText" style="margin-top:3px;"></p>
+                <p id="explainText" style="margin-top:3px;"></p>
             </div>
         </div>
-        <button id="nextQuestionBtn" class="btn btn-gold" style="display:none;justify-content:center;margin-top:8px;" onclick="nextQuestion()">ቀጣይ ➡️</button>
+        <button class="btn btn-gold" id="nextBtn" style="display:none;justify-content:center;margin-top:8px;" onclick="nextQ()">ቀጣይ ➡️</button>
     </div>
 
     <!-- RESULTS -->
-    <div id="screenResults" class="screen">
-        <div class="scroll-area">
-            <div class="card results-summary">
-                <h3>🏆 ውጤት</h3>
-                <div id="finalScoreBadge" class="score-badge">0/0</div>
-                <div id="pointsEarnedText" style="color:var(--gold);font-weight:700;margin-bottom:4px;">+0 ነጥብ</div>
-                <p id="accuracyText" style="font-size:0.85rem;">ትክክለኛነት: 0%</p>
-                <div class="stats-row">
-                    <div>⏱️ ጠቅላላ<br><strong id="totalTimeText">0s</strong></div>
-                    <div>⚡ አማካይ<br><strong id="avgTimeText">0s</strong></div>
-                    <div>🔥 Streak<br><strong id="maxStreakText">0</strong></div>
+    <div id="screenRes" class="screen">
+        <div class="scroll">
+            <div class="card" style="text-align:center;">
+                <h3>🏆 የጨዋታ ውጤት</h3>
+                <div class="res-score" id="resScore">0/0</div>
+                <div style="color:var(--gold);font-weight:700;margin-bottom:4px;" id="resPts">+0 ነጥብ</div>
+                <p style="font-size:0.85rem;" id="resAcc">ትክክለኛነት: 0%</p>
+                <div class="stats">
+                    <div class="stat">⏱️ ጠቅላላ<br><strong id="resTime">0s</strong></div>
+                    <div class="stat">⚡ አማካይ<br><strong id="resAvg">0s</strong></div>
+                    <div class="stat">🔥 Streak<br><strong id="resStreak">0</strong></div>
                 </div>
-                <div id="badgesContainer" class="badges-row"></div>
-                <p id="feedbackMessage" style="margin-top:8px;font-weight:700;color:var(--gold);font-size:0.85rem;"></p>
+                <div class="badges" id="resBadges"></div>
+                <p style="margin-top:8px;font-weight:700;color:var(--gold);font-size:0.85rem;" id="resMsg"></p>
             </div>
-            <button class="btn btn-share" style="margin-bottom:7px;" onclick="shareResultToGroup()">📤 ለግሩፕ አጋራ</button>
-            <button id="retakeMissedBtn" class="btn btn-gold" style="display:none;justify-content:center;margin-bottom:7px;" onclick="startMissedRetake()">🔄 የተሳሳቱትን ደግመው</button>
-            <button class="btn btn-primary" onclick="resetToHome()">🏠 ዋና ምናሌ</button>
+            <button class="btn btn-share" style="margin-bottom:7px;" onclick="shareResult()">📤 ለግሩፕ አጋራ</button>
+            <button class="btn btn-gold" id="retakeBtn" style="display:none;justify-content:center;margin-bottom:7px;" onclick="retakeMissed()">🔄 የተሳሳቱትን ደግመው</button>
+            <button class="btn btn-primary" onclick="goHome()">🏠 ዋና ምናሌ</button>
         </div>
     </div>
 
     <!-- LEADERBOARD -->
-    <div id="screenLeaderboard" class="screen">
-        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+    <div id="screenLB" class="screen">
+        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;">
             <h3 style="margin-bottom:8px;">🏆 ከፍተኛ ነጥብ</h3>
-            <div id="leaderboardList" class="scroll-area"></div>
+            <div class="scroll" id="lbList"></div>
         </div>
         <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
     </div>
 
     <!-- ACHIEVEMENTS -->
-    <div id="screenAchievements" class="screen">
-        <div class="card" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+    <div id="screenAch" class="screen">
+        <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0;">
             <h3 style="margin-bottom:8px;">🎖️ ሽልማቶች</h3>
-            <div id="achievementsList" class="scroll-area" style="font-size:0.85rem;"></div>
+            <div class="scroll" id="achList"></div>
         </div>
         <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
     </div>
 
     <!-- ADMIN -->
     <div id="screenAdmin" class="screen">
-        <div class="scroll-area">
+        <div class="scroll">
             <div class="card">
                 <h3 style="font-size:0.95rem;">🛡️ የአድሚን ማዕከል</h3>
-                <div style="font-size:0.8rem;margin:10px 0;line-height:1.5;">
-                    <p>📊 ጥያቄዎች: <strong id="adminTotalQuestions">0</strong></p>
-                    <p>👥 ተጫዋቾች: <strong id="adminTotalPlayers">0</strong></p>
-                    <p>📦 የተጫኑ ባንኮች: <strong id="adminBankCount">0</strong></p>
+                <div style="font-size:0.8rem;margin:10px 0;line-height:1.6;">
+                    <p>📊 ጥያቄዎች: <strong id="aQ">0</strong></p>
+                    <p>👥 ተጫዋቾች: <strong id="aP">0</strong></p>
+                    <p>📦 ባንኮች: <strong id="aB">0</strong></p>
                 </div>
-                <button class="btn btn-gold" style="width:100%;justify-content:center;margin-bottom:7px;" onclick="triggerFileUpload()">📥 JSON አስገባ</button>
-                <button class="btn" style="width:100%;justify-content:center;margin-bottom:7px;" onclick="showBankSelector()">📚 ባንክ ምረጥ</button>
-                <button class="btn" style="width:100%;justify-content:center;color:var(--red);" onclick="resetWeeklyLeaderboard()">🔄 ደረጃ አድስ</button>
+                <button class="btn btn-gold" style="width:100%;justify-content:center;margin-bottom:7px;" onclick="uploadJSON()">📥 JSON አስገባ</button>
+                <button class="btn" style="width:100%;justify-content:center;margin-bottom:7px;" onclick="selectBank()">📚 ባንክ ምረጥ</button>
+                <button class="btn" style="width:100%;justify-content:center;color:var(--red);" onclick="resetLB()">🔄 ደረጃ አድስ</button>
             </div>
             <div class="card">
-                <h4 style="font-size:0.85rem;margin-bottom:6px;">ተጫዋቾች (Admin only)</h4>
-                <div id="adminPlayerList" class="admin-list"></div>
+                <h4 style="font-size:0.85rem;margin-bottom:6px;">ተጫዋቾች</h4>
+                <div id="aPlayers"></div>
             </div>
         </div>
-        <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleFileUpload(event)">
+        <input type="file" id="fileIn" accept=".json" style="display:none;" onchange="onFile(event)">
         <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
     </div>
 
-    <!-- Achievement Popup -->
-    <div class="popup" id="achPopup">
-        <div class="popup-card">
-            <div style="font-size:2.5rem;margin-bottom:6px;" id="achIcon">🏆</div>
-            <h3 id="achTitle">ሽልማት!</h3>
-            <p id="achDesc" style="font-size:0.85rem;margin:8px 0;opacity:.9;"></p>
-            <button class="btn btn-gold" style="width:100%;justify-content:center;" onclick="closeAchPopup()">እሺ</button>
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <div class="popup-box">
+            <div style="font-size:2.6rem;margin-bottom:6px;" id="pIcon">🏆</div>
+            <h3 id="pTitle">ሽልማት!</h3>
+            <p id="pDesc" style="font-size:0.85rem;margin:8px 0;opacity:0.9;"></p>
+            <button class="btn btn-gold" style="width:100%;justify-content:center;" onclick="closePopup()">እሺ</button>
         </div>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.enableClosingConfirmation();
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.enableClosingConfirmation();
 
-        // ====== CONFIG ======
-        const ADMIN_IDS = [273799643, 6936902038];
-        const BOT_USERNAME = "YOUR_BOT_USERNAME";   // ← change this
-        // ====================
+const ADMIN_IDS = [273799643, 6936902038];
+const BOT_USERNAME = "EOChristian_bot";   // ← your bot username
 
-        const currentUser = tg.initDataUnsafe?.user || {};
-        const currentUserId = currentUser.id;
-        const isAdmin = ADMIN_IDS.includes(currentUserId);
+const user = tg.initDataUnsafe?.user || {};
+const uid = user.id;
+const isAdmin = ADMIN_IDS.includes(uid);
 
-        let screenHistory = ['screenMainMenu'];
-        let activeQuestions = [], currentQuestionIndex = 0;
-        let score = 0, quizPoints = 0, currentStreak = 0, maxStreak = 0;
-        let selectedMainCat = '', selectedSubCat = '';
-        let timerInterval = null, questionStartTime = 0, answerTimes = [], missedQuestions = [];
-        let questionBank = [];
-        let activeBankName = 'default';
+let history = ['screenMain'];
+let questions = [], idx = 0, score = 0, pts = 0, streak = 0, maxStreak = 0;
+let mainCat = '', subCat = '';
+let timer = null, startTime = 0, times = [], missed = [];
+let bank = [];
+let totalPoints = +localStorage.getItem('ortho_pts') || 0;
+let ach = JSON.parse(localStorage.getItem('ortho_ach') || '[]');
+let lastLogin = localStorage.getItem('ortho_login') || '';
+let mastery = JSON.parse(localStorage.getItem('ortho_mast') || '{}');
+let players = JSON.parse(localStorage.getItem('ortho_players') || '{}');
+let banks = JSON.parse(localStorage.getItem('ortho_banks') || '{}');
 
-        // Persistent data
-        let totalPoints = parseInt(localStorage.getItem('ortho_total_points') || '0');
-        let unlockedAchievements = JSON.parse(localStorage.getItem('ortho_achievements') || '[]');
-        let lastLogin = localStorage.getItem('ortho_last_login') || '';
-        let categoryMastery = JSON.parse(localStorage.getItem('ortho_mastery') || '{}');
-        let playerRegistry = JSON.parse(localStorage.getItem('ortho_players') || '{}');
-        let questionBanks = JSON.parse(localStorage.getItem('ortho_banks') || '{}');
+const LEVELS = [
+    {min:0, title:"አዲስ ተማሪ", icon:"🌱"},
+    {min:500, title:"ተማሪ", icon:"📖"},
+    {min:1500, title:"ዲያቆን", icon:"🕊️"},
+    {min:3500, title:"ካህን", icon:"✝️"},
+    {min:7000, title:"ሊቅ", icon:"👑"},
+    {min:12000, title:"አባት", icon:"🏛️"}
+];
 
-        const LEVELS = [
-            { min: 0, title: "አዲስ ተማሪ", icon: "🌱" },
-            { min: 500, title: "ተማሪ", icon: "📖" },
-            { min: 1500, title: "ዲያቆን", icon: "🕊️" },
-            { min: 3500, title: "ካህን", icon: "✝️" },
-            { min: 7000, title: "ሊቅ", icon: "👑" },
-            { min: 12000, title: "አባት", icon: "🏛️" }
-        ];
+const ACHIEVEMENTS = [
+    {id:"first", icon:"🎯", title:"መጀመሪያ ድል", desc:"የመጀመሪያ ትክክለኛ መልስ"},
+    {id:"p5", icon:"💯", title:"ፍጹም 5", desc:"5 ጥያቄ 100%"},
+    {id:"p10", icon:"🏆", title:"የ10 ሊቅ", desc:"10 ጥያቄ 100%"},
+    {id:"s5", icon:"🔥", title:"5 ተከታታይ", desc:"5 ጊዜ ተከታታይ ትክክል"},
+    {id:"speed", icon:"⚡", title:"የፍጥነት አበጋዝ", desc:"አማካይ ≤ 5 ሰከንድ"},
+    {id:"lv3", icon:"🕊️", title:"ዲያቆን", desc:"Level 3 ደረስክ"},
+    {id:"daily", icon:"📅", title:"ዕለታዊ", desc:"ዛሬ ገብተሃል"},
+    {id:"master", icon:"📚", title:"ምድብ ጌታ", desc:"አንድ ምድብ 50+ ነጥብ"}
+];
 
-        const ALL_ACHIEVEMENTS = [
-            { id: "first_win", icon: "🎯", title: "መጀመሪያ ድል", desc: "የመጀመሪያ ጥያቄ በትክክል መልስ" },
-            { id: "perfect_5", icon: "💯", title: "ፍጹም 5", desc: "5 ጥያቄ 100% ትክክል" },
-            { id: "perfect_10", icon: "🏆", title: "የ10 ሊቅ", desc: "10 ጥያቄ 100%" },
-            { id: "streak_5", icon: "🔥", title: "5 ተከታታይ", desc: "5 ጊዜ ተከታታይ ትክክል" },
-            { id: "speed_demon", icon: "⚡", title: "የፍጥነት አበጋዝ", desc: "አማካይ ከ5 ሰከንድ በታች" },
-            { id: "level_3", icon: "🕊️", title: "ዲያቆን ደረጃ", desc: "Level 3 ደረስ" },
-            { id: "daily", icon: "📅", title: "ዕለታዊ ተሳትፎ", desc: "ዛሬ ገብተሃል" },
-            { id: "master_one", icon: "📚", title: "ምድብ ጌታ", desc: "አንድ ምድብ 50+ ነጥብ" }
-        ];
+window.onload = () => {
+    const th = localStorage.getItem('ortho_theme') || 'dark';
+    document.body.setAttribute('data-theme', th);
+    document.getElementById('themeBtn').textContent = th === 'dark' ? '☀️' : '🌙';
 
-        window.onload = function() {
-            const savedTheme = localStorage.getItem('ortho_theme') || 'dark';
-            document.body.setAttribute('data-theme', savedTheme);
-            document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+    document.getElementById('userName').textContent = `👤 ${user.first_name || 'ተጫዋች'}`;
+    updateXP();
+    loadBank();
+    updateWeekly();
+    dailyBonus();
+    if (isAdmin) document.getElementById('adminBtn').style.display = 'flex';
+    register();
+};
 
-            document.getElementById('userNameDisplay').innerText = `👤 ${currentUser.first_name || 'ተጫዋች'}`;
-            updatePointsAndLevel();
-            loadQuestionBank();
-            updateWeeklySpotlight();
-            checkDailyBonus();
+function register() {
+    if (!uid) return;
+    players[uid] = {
+        id: uid,
+        name: user.first_name || 'ተጫዋች',
+        username: user.username || '',
+        photo: user.photo_url || '',
+        totalPoints,
+        last: new Date().toISOString()
+    };
+    localStorage.setItem('ortho_players', JSON.stringify(players));
+}
 
-            if (isAdmin) document.getElementById('adminHubBtn').style.display = 'flex';
+function getLevel(p) {
+    let lv = LEVELS[0], i = 0;
+    for (let j = LEVELS.length-1; j >= 0; j--) {
+        if (p >= LEVELS[j].min) { lv = LEVELS[j]; i = j; break; }
+    }
+    const next = LEVELS[i+1];
+    const prog = next ? ((p - lv.min) / (next.min - lv.min)) * 100 : 100;
+    return {...lv, num: i+1, prog, next: next ? next.min : p};
+}
 
-            // Register player
-            registerPlayer();
-        };
+function updateXP() {
+    document.getElementById('totalPts').textContent = `⭐ ${totalPoints}`;
+    const lv = getLevel(totalPoints);
+    document.getElementById('levelBadge').textContent = `Lv.${lv.num}`;
+    document.getElementById('levelTitle').textContent = `${lv.icon} ${lv.title}`;
+    document.getElementById('xpLabel').textContent = `${totalPoints} / ${lv.next}`;
+    document.getElementById('xpFill').style.width = Math.min(100, lv.prog) + '%';
+    localStorage.setItem('ortho_pts', totalPoints);
+}
 
-        function registerPlayer() {
-            if (!currentUserId) return;
-            playerRegistry[currentUserId] = {
-                id: currentUserId,
-                name: currentUser.first_name || 'ተጫዋች',
-                username: currentUser.username || '',
-                photo: currentUser.photo_url || '',
-                totalPoints: totalPoints,
-                lastPlayed: new Date().toISOString()
-            };
-            localStorage.setItem('ortho_players', JSON.stringify(playerRegistry));
-        }
+function dailyBonus() {
+    const today = new Date().toDateString();
+    if (lastLogin !== today) {
+        lastLogin = today;
+        localStorage.setItem('ortho_login', today);
+        totalPoints += 50;
+        updateXP();
+        unlock('daily');
+        setTimeout(() => showPopup('📅', 'ዕለታዊ ቦነስ!', '+50 ነጥብ አግኝተሃል'), 500);
+    }
+}
 
-        function getLevel(pts) {
-            let lvl = LEVELS[0];
-            for (let i = LEVELS.length - 1; i >= 0; i--) {
-                if (pts >= LEVELS[i].min) { lvl = LEVELS[i]; break; }
-            }
-            const idx = LEVELS.indexOf(lvl);
-            const next = LEVELS[idx + 1];
-            const progress = next ? ((pts - lvl.min) / (next.min - lvl.min)) * 100 : 100;
-            return { ...lvl, levelNum: idx + 1, progress, nextMin: next ? next.min : pts };
-        }
+function toggleTheme() {
+    const cur = document.body.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', next);
+    document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('ortho_theme', next);
+}
 
-        function updatePointsAndLevel() {
-            document.getElementById('userTotalPoints').innerText = `⭐ ${totalPoints}`;
-            const lv = getLevel(totalPoints);
-            document.getElementById('levelChip').innerText = `Lv.${lv.levelNum}`;
-            document.getElementById('xpText').innerText = `${totalPoints} / ${lv.nextMin}`;
-            document.getElementById('xpFill').style.width = `${Math.min(100, lv.progress)}%`;
-            localStorage.setItem('ortho_total_points', totalPoints);
-        }
-
-        function checkDailyBonus() {
-            const today = new Date().toDateString();
-            if (lastLogin !== today) {
-                lastLogin = today;
-                localStorage.setItem('ortho_last_login', today);
-                totalPoints += 50;
-                updatePointsAndLevel();
-                unlockAchievement('daily');
-                setTimeout(() => showAchPopup('📅', 'ዕለታዊ ቦነስ!', '+50 ነጥብ አግኝተሃል'), 600);
-            }
-        }
-
-        function toggleTheme() {
-            const cur = document.body.getAttribute('data-theme');
-            const next = cur === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', next);
-            document.getElementById('themeBtn').innerText = next === 'dark' ? '☀️' : '🌙';
-            localStorage.setItem('ortho_theme', next);
-        }
-
-        function loadQuestionBank() {
-            if (Object.keys(questionBanks).length > 0) {
-                const names = Object.keys(questionBanks);
-                activeBankName = localStorage.getItem('ortho_active_bank') || names[0];
-                questionBank = questionBanks[activeBankName] || [];
-            } else {
-                const saved = localStorage.getItem('ortho_question_bank');
-                if (saved) {
-                    questionBank = JSON.parse(saved);
-                    questionBanks['default'] = questionBank;
-                    localStorage.setItem('ortho_banks', JSON.stringify(questionBanks));
-                } else {
-                    fetch('questions.json')
-                        .then(r => r.json())
-                        .then(data => {
-                            questionBank = data;
-                            questionBanks['default'] = data;
-                            localStorage.setItem('ortho_banks', JSON.stringify(questionBanks));
-                            localStorage.setItem('ortho_question_bank', JSON.stringify(data));
-                        })
-                        .catch(() => {
-                            questionBank = [{
-                                id: "1", category: "Amstu_Aemade_Mstirat", subcategory: "Mstire_Selasie",
-                                question: "ከአምስቱ አእማደ ምስጢራት መካከል የመጀመሪያው ምስጢር የትኛው ነው?",
-                                a: "ምሥጢረ ሥጋዌ", b: "ምሥጢረ ሥላሴ", c: "ምሥጢረ ጥምቀት", d: "ምሥጢረ ቁርባን",
-                                answer: "B",
-                                explanation: "አምስቱ አእማደ ምስጢራት፡ ምሥጢረ ሥላሴ፣ ምሥጢረ ሥጋዌ፣ ምሥጢረ ጥምቀት፣ ምሥጢረ ቁርባን እና ምሥጢረ ትንሣኤ ሙታን ናቸው።"
-                            }];
-                        });
-                }
-            }
-        }
-
-        // Navigation
-        function navigateTo(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if (id !== 'screenMainMenu') {
-                if (screenHistory[screenHistory.length-1] !== id) screenHistory.push(id);
-                document.getElementById('backBar').style.display = 'block';
-            } else {
-                screenHistory = ['screenMainMenu'];
-                document.getElementById('backBar').style.display = 'none';
-            }
-        }
-        function goBack() {
-            if (screenHistory.length > 1) {
-                screenHistory.pop();
-                const prev = screenHistory[screenHistory.length-1];
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-                document.getElementById(prev).classList.add('active');
-                if (prev === 'screenMainMenu') document.getElementById('backBar').style.display = 'none';
-            }
-        }
-        function openMysteriesMenu() { selectedMainCat = 'Amstu_Aemade_Mstirat'; navigateTo('screenMysteriesMenu'); }
-        function selectMainCategory(k) {
-            selectedMainCat = k; selectedSubCat = '';
-            document.getElementById('selectedCategoryTitle').innerText = 'ምድብ: ' + getCatName(k);
-            navigateTo('screenCountMenu');
-        }
-        function selectSubCategory(k) {
-            selectedSubCat = k;
-            document.getElementById('selectedCategoryTitle').innerText = 'ምድብ: ' + getCatName(k);
-            navigateTo('screenCountMenu');
-        }
-        function getCatName(key) {
-            const map = {
-                'Ye-Tekalale':'የተቀላቀለ','Ye-Adminu_Ye-Zare_Tyaqewoch':'የዛሬ ጥያቄዎች',
-                'Addis_Kidan':'አዲስ ኪዳን','Bluy_Kidan':'ብሉይ ኪዳን','Amstu_Aemade_Mstirat':'አምስቱ አእማደ ምስጢራት',
-                'Mstire_Selasie':'ምሥጢረ ሥላሴ','Mstire_Sigawe':'ምሥጢረ ሥጋዌ','Mstire_Timket':'ምሥጢረ ጥምቀት',
-                'Mstire_Qurban':'ምሥጢረ ቁርባን','Mstire_Tinsae_Mutan':'ምሥጢረ ትንሣኤ','Hulumn_qelaql':'ሁሉንም ቀላቅል',
-                'Negere_Kristos':'ነገረ ክርስቶስ','SebatuMstirat':'ሰባቱ ምስጢራት','Kidusan_ena_Emebetachin':'ቅዱሳን እና እመቤታችን',
-                'Abew_Kidusan':'አበው ቅዱሳን','Tarikoch':'ታሪኮች','Trguame':'ትርጓሜ',
-                'Orthodox_Dogma_Srate_Betekristian':'ዶግማ እና ሥርዓት','Aqabe_Emnet_Protestant':'አቃቤ እምነት (ፕሮቴስታንት)',
-                'Aqabe_Emnet_Muslim':'አቃቤ እምነት (ሙስሊም)'
-            };
-            return map[key] || key;
-        }
-
-        // Quiz
-        function startQuiz(countReq) {
-            let filtered = questionBank.filter(q => {
-                if (selectedSubCat) {
-                    if (selectedSubCat === 'Hulumn_qelaql') return q.category === 'Amstu_Aemade_Mstirat';
-                    return q.subcategory === selectedSubCat;
-                }
-                if (selectedMainCat === 'Ye-Tekalale') return true;
-                return q.category === selectedMainCat;
+function loadBank() {
+    if (Object.keys(banks).length) {
+        const name = localStorage.getItem('ortho_active') || Object.keys(banks)[0];
+        bank = banks[name] || [];
+    } else {
+        const s = localStorage.getItem('ortho_bank');
+        if (s) {
+            bank = JSON.parse(s);
+            banks.default = bank;
+            localStorage.setItem('ortho_banks', JSON.stringify(banks));
+        } else {
+            fetch('questions.json').then(r => r.json()).then(d => {
+                bank = d;
+                banks.default = d;
+                localStorage.setItem('ortho_banks', JSON.stringify(banks));
+                localStorage.setItem('ortho_bank', JSON.stringify(d));
+            }).catch(() => {
+                bank = [{
+                    id:"1", category:"Amstu_Aemade_Mstirat", subcategory:"Mstire_Selasie",
+                    question:"ከአምስቱ አእማደ ምስጢራት መካከል የመጀመሪያው ምስጢር የትኛው ነው?",
+                    a:"ምሥጢረ ሥጋዌ", b:"ምሥጢረ ሥላሴ", c:"ምሥጢረ ጥምቀት", d:"ምሥጢረ ቁርባን",
+                    answer:"B", explanation:"አምስቱ አእማደ ምስጢራት፡ ምሥጢረ ሥላሴ፣ ምሥጢረ ሥጋዌ፣ ምሥጢረ ጥምቀት፣ ምሥጢረ ቁርባን እና ምሥጢረ ትንሣኤ ሙታን ናቸው።"
+                }];
             });
-            if (filtered.length === 0) {
-                tg.showAlert('ለዚህ ምድብ ጥያቄ የለም። አድሚኑ እስኪያስገባ ይጠብቁ።');
-                return;
-            }
-            filtered.sort(() => Math.random() - 0.5);
-            const count = (countReq === 'random' || countReq > filtered.length) ? filtered.length : countReq;
-            activeQuestions = filtered.slice(0, count);
-            currentQuestionIndex = 0; score = 0; quizPoints = 0;
-            currentStreak = 0; maxStreak = 0; answerTimes = []; missedQuestions = [];
-            navigateTo('screenQuiz');
-            renderQuestion();
         }
+    }
+}
 
-        function renderQuestion() {
-            clearInterval(timerInterval);
-            document.getElementById('nextQuestionBtn').style.display = 'none';
-            document.getElementById('explanationBox').style.display = 'none';
-            const q = activeQuestions[currentQuestionIndex];
-            document.getElementById('quizProgressText').innerText = `\( {currentQuestionIndex+1}/ \){activeQuestions.length}`;
-            document.getElementById('quizCategoryBadge').innerText = getCatName(q.subcategory || q.category);
-            document.getElementById('questionText').innerText = q.question;
+function nav(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id !== 'screenMain') {
+        if (history[history.length-1] !== id) history.push(id);
+        document.getElementById('backBar').style.display = 'block';
+    } else {
+        history = ['screenMain'];
+        document.getElementById('backBar').style.display = 'none';
+    }
+}
+function goBack() {
+    if (history.length > 1) {
+        history.pop();
+        const prev = history[history.length-1];
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(prev).classList.add('active');
+        if (prev === 'screenMain') document.getElementById('backBar').style.display = 'none';
+    }
+}
+function goHome() { history = ['screenMain']; nav('screenMain'); updateWeekly(); }
 
-            const badge = document.getElementById('streakBadge');
-            if (currentStreak >= 2) {
-                badge.innerText = `🔥 ${currentStreak}x`;
-                badge.style.display = 'inline-block';
-            } else badge.style.display = 'none';
+function catName(k) {
+    const m = {
+        'Ye-Tekalale':'የተቀላቀለ','Ye-Adminu_Ye-Zare_Tyaqewoch':'የዛሬ ጥያቄዎች',
+        'Addis_Kidan':'አዲስ ኪዳን','Bluy_Kidan':'ብሉይ ኪዳን','Amstu_Aemade_Mstirat':'አምስቱ አእማደ ምስጢራት',
+        'Mstire_Selasie':'ምሥጢረ ሥላሴ','Mstire_Sigawe':'ምሥጢረ ሥጋዌ','Mstire_Timket':'ምሥጢረ ጥምቀት',
+        'Mstire_Qurban':'ምሥጢረ ቁርባን','Mstire_Tinsae_Mutan':'ምሥጢረ ትንሣኤ','Hulumn_qelaql':'ሁሉንም ቀላቅል',
+        'Negere_Kristos':'ነገረ ክርስቶስ','SebatuMstirat':'ሰባቱ ምስጢራት','Kidusan_ena_Emebetachin':'ቅዱሳን እና እመቤታችን',
+        'Abew_Kidusan':'አበው ቅዱሳን','Tarikoch':'ታሪኮች','Trguame':'ትርጓሜ',
+        'Orthodox_Dogma_Srate_Betekristian':'ዶግማ እና ሥርዓት','Aqabe_Emnet_Protestant':'አቃቤ እምነት (ፕሮቴስታንት)',
+        'Aqabe_Emnet_Muslim':'አቃቤ እምነት (ሙስሊም)'
+    };
+    return m[k] || k;
+}
 
-            const list = document.getElementById('optionsList');
-            list.innerHTML = '';
-            ['A','B','C','D'].forEach(k => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = `${k}. ${q[k.toLowerCase()]}`;
-                btn.onclick = () => checkAnswer(k, btn);
-                list.appendChild(btn);
-            });
+function goMysteries() { mainCat = 'Amstu_Aemade_Mstirat'; nav('screenMyst'); }
+function pickCat(k) { mainCat = k; subCat = ''; document.getElementById('catTitle').textContent = 'ምድብ: ' + catName(k); nav('screenCount'); }
+function pickSub(k) { subCat = k; document.getElementById('catTitle').textContent = 'ምድብ: ' + catName(k); nav('screenCount'); }
 
-            questionStartTime = Date.now();
-            let timeLeft = 20;
-            const bar = document.getElementById('timerProgress');
-            bar.style.width = '100%';
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                bar.style.width = `${(timeLeft/20)*100}%`;
-                if (timeLeft <= 0) { clearInterval(timerInterval); checkAnswer('TIMEOUT', null); }
-            }, 1000);
+function startQuiz(n) {
+    let list = bank.filter(q => {
+        if (subCat) {
+            if (subCat === 'Hulumn_qelaql') return q.category === 'Amstu_Aemade_Mstirat';
+            return q.subcategory === subCat;
         }
+        if (mainCat === 'Ye-Tekalale') return true;
+        return q.category === mainCat;
+    });
+    if (!list.length) { tg.showAlert('ለዚህ ምድብ ጥያቄ የለም'); return; }
+    list.sort(() => Math.random() - 0.5);
+    const c = (n === 'random' || n > list.length) ? list.length : n;
+    questions = list.slice(0, c);
+    idx = 0; score = 0; pts = 0; streak = 0; maxStreak = 0; times = []; missed = [];
+    nav('screenQuiz');
+    renderQ();
+}
 
-        function checkAnswer(selected, btnEl) {
-            clearInterval(timerInterval);
-            const elapsed = Math.round((Date.now() - questionStartTime) / 1000);
-            answerTimes.push(elapsed);
-            const q = activeQuestions[currentQuestionIndex];
-            const correct = selected === q.answer;
-            document.querySelectorAll('.option-btn').forEach(b => b.onclick = null);
+function renderQ() {
+    clearInterval(timer);
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('explainBox').style.display = 'none';
+    const q = questions[idx];
+    document.getElementById('qProg').textContent = `\( {idx+1}/ \){questions.length}`;
+    document.getElementById('qCat').textContent = catName(q.subcategory || q.category);
+    document.getElementById('qText').textContent = q.question;
 
-            if (correct) {
-                score++; currentStreak++;
-                if (currentStreak > maxStreak) maxStreak = currentStreak;
-                const speedBonus = Math.max(0, 20 - elapsed) * 2.5;
-                const mult = currentStreak >= 3 ? 1.5 : 1;
-                quizPoints += Math.round((100 + speedBonus) * mult);
-                if (btnEl) btnEl.classList.add('correct');
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                if (score === 1) unlockAchievement('first_win');
-                if (currentStreak >= 5) unlockAchievement('streak_5');
-            } else {
-                currentStreak = 0;
-                missedQuestions.push(q);
-                if (btnEl) btnEl.classList.add('incorrect');
-                document.querySelectorAll('.option-btn').forEach(b => {
-                    if (b.innerText.startsWith(q.answer)) b.classList.add('correct');
-                });
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            }
-            if (q.explanation) {
-                document.getElementById('explanationText').innerText = q.explanation;
-                document.getElementById('explanationBox').style.display = 'block';
-            }
-            document.getElementById('nextQuestionBtn').style.display = 'flex';
-        }
+    const sb = document.getElementById('streakBadge');
+    if (streak >= 2) { sb.textContent = `🔥 ${streak}x`; sb.style.display = 'inline-block'; }
+    else sb.style.display = 'none';
 
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < activeQuestions.length) renderQuestion();
-            else showFinalResults();
-        }
+    const box = document.getElementById('opts');
+    box.innerHTML = '';
+    ['A','B','C','D'].forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.textContent = `${k}. ${q[k.toLowerCase()]}`;
+        b.onclick = () => check(k, b);
+        box.appendChild(b);
+    });
 
-        function showFinalResults() {
-            navigateTo('screenResults');
-            const total = activeQuestions.length;
-            const accuracy = Math.round((score / total) * 100);
-            totalPoints += quizPoints;
-            updatePointsAndLevel();
-            saveLeaderboardScore();
-            updateWeeklySpotlight();
-            registerPlayer();
+    startTime = Date.now();
+    let left = 20;
+    const fill = document.getElementById('timerFill');
+    fill.style.width = '100%';
+    fill.style.background = 'var(--green)';
+    timer = setInterval(() => {
+        left--;
+        fill.style.width = (left/20*100) + '%';
+        if (left <= 7) fill.style.background = 'var(--orange)';
+        if (left <= 3) fill.style.background = 'var(--red)';
+        if (left <= 0) { clearInterval(timer); check('TIMEOUT', null); }
+    }, 1000);
+}
 
-            // Mastery
-            const catKey = selectedSubCat || selectedMainCat;
-            categoryMastery[catKey] = (categoryMastery[catKey] || 0) + quizPoints;
-            localStorage.setItem('ortho_mastery', JSON.stringify(categoryMastery));
-            if (categoryMastery[catKey] >= 50) unlockAchievement('master_one');
+function check(sel, el) {
+    clearInterval(timer);
+    const elapsed = Math.round((Date.now() - startTime)/1000);
+    times.push(elapsed);
+    const q = questions[idx];
+    const ok = sel === q.answer;
+    document.querySelectorAll('.opt').forEach(b => b.onclick = null);
 
-            document.getElementById('finalScoreBadge').innerText = `\( {score}/ \){total}`;
-            document.getElementById('pointsEarnedText').innerText = `+${quizPoints} ነጥብ`;
-            document.getElementById('accuracyText').innerText = `ትክክለኛነት: ${accuracy}%`;
-            const totalTime = answerTimes.reduce((a,b)=>a+b,0);
-            document.getElementById('totalTimeText').innerText = `${totalTime}s`;
-            document.getElementById('avgTimeText').innerText = `${Math.round(totalTime/total)}s`;
-            document.getElementById('maxStreakText').innerText = maxStreak;
+    if (ok) {
+        score++; streak++;
+        if (streak > maxStreak) maxStreak = streak;
+        const bonus = Math.max(0, 20 - elapsed) * 2.5;
+        const mult = streak >= 3 ? 1.5 : 1;
+        pts += Math.round((100 + bonus) * mult);
+        if (el) el.classList.add('correct');
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        if (score === 1) unlock('first');
+        if (streak >= 5) unlock('s5');
+    } else {
+        streak = 0;
+        missed.push(q);
+        if (el) el.classList.add('wrong');
+        document.querySelectorAll('.opt').forEach(b => {
+            if (b.textContent.startsWith(q.answer)) b.classList.add('correct');
+        });
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+    }
+    if (q.explanation) {
+        document.getElementById('explainText').textContent = q.explanation;
+        document.getElementById('explainBox').style.display = 'block';
+    }
+    document.getElementById('nextBtn').style.display = 'flex';
+}
 
-            const box = document.getElementById('badgesContainer');
-            box.innerHTML = '';
-            if (accuracy === 100) {
-                box.innerHTML += `<span class="badge-chip">🏆 100%</span>`;
-                if (total >= 5) unlockAchievement('perfect_5');
-                if (total >= 10) unlockAchievement('perfect_10');
-            }
-            if (Math.round(totalTime/total) <= 5) {
-                box.innerHTML += `<span class="badge-chip">⚡ ፍጥነት</span>`;
-                unlockAchievement('speed_demon');
-            }
-            if (maxStreak >= 3) box.innerHTML += `<span class="badge-chip">🔥 Streak</span>`;
+function nextQ() {
+    idx++;
+    if (idx < questions.length) renderQ();
+    else finish();
+}
 
-            const lv = getLevel(totalPoints);
-            if (lv.levelNum >= 3) unlockAchievement('level_3');
+function finish() {
+    nav('screenRes');
+    const total = questions.length;
+    const acc = Math.round(score/total*100);
+    totalPoints += pts;
+    updateXP();
+    saveScore();
+    updateWeekly();
+    register();
 
-            if (accuracy === 100 && typeof confetti === 'function') {
-                confetti({ particleCount: 90, spread: 65, origin: { y: 0.6 } });
-            }
+    const key = subCat || mainCat;
+    mastery[key] = (mastery[key] || 0) + pts;
+    localStorage.setItem('ortho_mast', JSON.stringify(mastery));
+    if (mastery[key] >= 50) unlock('master');
 
-            document.getElementById('retakeMissedBtn').style.display = missedQuestions.length ? 'flex' : 'none';
-            let msg = '🌟 በጣም ጥሩ! ቀጥሉ።';
-            if (accuracy === 100) msg = '🏆 ድንቅ! ሙሉ በሙሉ ትክክል።';
-            else if (accuracy < 50) msg = '💪 ተስፋ አትቁረጡ! ደግመው ይሥሩ።';
-            document.getElementById('feedbackMessage').innerText = msg;
+    document.getElementById('resScore').textContent = `\( {score}/ \){total}`;
+    document.getElementById('resPts').textContent = `+${pts} ነጥብ`;
+    document.getElementById('resAcc').textContent = `ትክክለኛነት: ${acc}%`;
+    const t = times.reduce((a,b)=>a+b,0);
+    document.getElementById('resTime').textContent = t + 's';
+    document.getElementById('resAvg').textContent = Math.round(t/total) + 's';
+    document.getElementById('resStreak').textContent = maxStreak;
 
-            // AUTO SEND TO BOT (bot will post to group)
-            autoSendScore(accuracy, total);
-        }
+    const box = document.getElementById('resBadges');
+    box.innerHTML = '';
+    if (acc === 100) {
+        box.innerHTML += '<span class="chip">🏆 100%</span>';
+        if (total >= 5) unlock('p5');
+        if (total >= 10) unlock('p10');
+    }
+    if (Math.round(t/total) <= 5) { box.innerHTML += '<span class="chip">⚡ ፍጥነት</span>'; unlock('speed'); }
+    if (maxStreak >= 3) box.innerHTML += '<span class="chip">🔥 Streak</span>';
+    if (getLevel(totalPoints).num >= 3) unlock('lv3');
 
-        function autoSendScore(accuracy, total) {
-            const achText = unlockedAchievements.slice(-3).map(id => {
-                const a = ALL_ACHIEVEMENTS.find(x => x.id === id);
+    if (acc === 100 && typeof confetti === 'function') confetti({particleCount:80, spread:60, origin:{y:0.6}});
+
+    document.getElementById('retakeBtn').style.display = missed.length ? 'flex' : 'none';
+    let msg = '🌟 በጣም ጥሩ! ቀጥሉ።';
+    if (acc === 100) msg = '🏆 ድንቅ! ሙሉ በሙሉ ትክክል።';
+    else if (acc < 50) msg = '💪 ተስፋ አትቁረጡ! ደግመው ይሥሩ።';
+    document.getElementById('resMsg').textContent = msg;
+
+    // send to bot
+    try {
+        tg.sendData(JSON.stringify({
+            type: 'score',
+            name: user.first_name || 'ተጫዋች',
+            userId: uid,
+            category: catName(subCat || mainCat),
+            score, total, accuracy: acc,
+            points: pts, maxStreak,
+            level: getLevel(totalPoints).num,
+            achievements: ach.slice(-3).map(id => {
+                const a = ACHIEVEMENTS.find(x => x.id === id);
                 return a ? a.icon + ' ' + a.title : '';
-            }).filter(Boolean).join(' • ');
+            }).filter(Boolean).join(' • '),
+            botUsername: BOT_USERNAME
+        }));
+    } catch(e){}
+}
 
-            const payload = {
-                type: 'score',
-                name: currentUser.first_name || 'ተጫዋች',
-                userId: currentUserId,
-                category: getCatName(selectedSubCat || selectedMainCat),
-                score, total, accuracy,
-                points: quizPoints,
-                maxStreak,
-                level: getLevel(totalPoints).levelNum,
-                achievements: achText,
-                botUsername: BOT_USERNAME
-            };
-            try {
-                tg.sendData(JSON.stringify(payload));
-            } catch (e) { console.log('sendData not available outside Telegram'); }
+function shareResult() {
+    const acc = Math.round(score/questions.length*100);
+    const text = `🏆 የኦርቶዶክስ ተዋሕዶ ውጤቴ!\n\n👤 ${user.first_name||'ተጫዋች'}\n📚 ${catName(subCat||mainCat)}\n🎯 \( {score}/ \){questions.length} (\( {acc}%)\n⭐ + \){pts} ነጥብ\n🔥 Max Streak: ${maxStreak}x\n\nተወዳደሩ 👇`;
+    tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/\( {BOT_USERNAME}&text= \){encodeURIComponent(text)}`);
+}
+
+function retakeMissed() {
+    questions = [...missed];
+    idx = 0; score = 0; pts = 0; streak = 0; times = []; missed = [];
+    nav('screenQuiz');
+    renderQ();
+}
+
+function saveScore() {
+    let board = JSON.parse(localStorage.getItem('ortho_lb') || '[]');
+    board.push({
+        id: uid,
+        name: user.first_name || 'ተጫዋች',
+        username: user.username || '',
+        photo: user.photo_url || '',
+        points: pts,
+        date: new Date().toLocaleDateString('am-ET')
+    });
+    board.sort((a,b) => b.points - a.points);
+    board = board.slice(0, 15);
+    localStorage.setItem('ortho_lb', JSON.stringify(board));
+}
+
+function updateWeekly() {
+    const board = JSON.parse(localStorage.getItem('ortho_lb') || '[]');
+    if (board.length) {
+        document.getElementById('weeklyName').textContent = board[0].name;
+        document.getElementById('weeklyScore').textContent = board[0].points;
+    }
+}
+
+function openLB() {
+    nav('screenLB');
+    const list = document.getElementById('lbList');
+    list.innerHTML = '';
+    const board = JSON.parse(localStorage.getItem('ortho_lb') || '[]');
+    if (!board.length) {
+        list.innerHTML = '<p style="text-align:center;opacity:0.7;padding:20px;">እስካሁን ውጤት የለም</p>';
+        return;
+    }
+    const medals = ['🥇','🥈','🥉'];
+    board.forEach((item, i) => {
+        const row = document.createElement('div');
+        row.className = 'lb-item';
+        const av = item.photo ? `<img src="${item.photo}">` : '👤';
+        const nameHtml = (isAdmin && item.username)
+            ? `<span style="text-decoration:underline;cursor:pointer;" onclick="tg.openTelegramLink('https://t.me/\( {item.username}')"> \){item.name}</span>`
+            : `<strong>${item.name}</strong>`;
+        row.innerHTML = `
+            <div class="lb-rank">${medals[i] || (i+1)}</div>
+            <div class="lb-avatar">${av}</div>
+            <div style="flex:1;">
+                <div>${nameHtml}</div>
+                <div style="font-size:0.7rem;opacity:0.65;">${item.date||''}</div>
+            </div>
+            <div style="font-weight:700;color:var(--gold);">⭐ ${item.points}</div>
+        `;
+        list.appendChild(row);
+    });
+}
+
+function unlock(id) {
+    if (ach.includes(id)) return;
+    ach.push(id);
+    localStorage.setItem('ortho_ach', JSON.stringify(ach));
+    const a = ACHIEVEMENTS.find(x => x.id === id);
+    if (a) setTimeout(() => showPopup(a.icon, a.title, a.desc), 300);
+}
+function showPopup(icon, title, desc) {
+    document.getElementById('pIcon').textContent = icon;
+    document.getElementById('pTitle').textContent = title;
+    document.getElementById('pDesc').textContent = desc;
+    document.getElementById('popup').classList.add('show');
+}
+function closePopup() { document.getElementById('popup').classList.remove('show'); }
+
+function openAch() {
+    nav('screenAch');
+    const list = document.getElementById('achList');
+    list.innerHTML = '';
+    ACHIEVEMENTS.forEach(a => {
+        const unlocked = ach.includes(a.id);
+        const div = document.createElement('div');
+        div.style.cssText = `display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.07);opacity:${unlocked?1:0.4}`;
+        div.innerHTML = `
+            <div style="font-size:1.5rem;">${a.icon}</div>
+            <div style="flex:1;">
+                <div style="font-weight:700;">${a.title}</div>
+                <div style="font-size:0.75rem;opacity:0.8;">${a.desc}</div>
+            </div>
+            <div>${unlocked ? '✅' : '🔒'}</div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function openAdmin() {
+    nav('screenAdmin');
+    document.getElementById('aQ').textContent = bank.length;
+    document.getElementById('aP').textContent = Object.keys(players).length;
+    document.getElementById('aB').textContent = Object.keys(banks).length;
+
+    const box = document.getElementById('aPlayers');
+    box.innerHTML = '';
+    Object.values(players).sort((a,b)=>b.totalPoints-a.totalPoints).forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'admin-row';
+        row.innerHTML = `
+            <div>
+                <div>${p.name} ${p.username ? '@'+p.username : ''}</div>
+                <div style="font-size:0.7rem;opacity:0.6;">ID: ${p.id}</div>
+            </div>
+            <div style="color:var(--gold);font-weight:700;">${p.totalPoints}</div>
+        `;
+        if (p.username) {
+            row.style.cursor = 'pointer';
+            row.onclick = () => tg.openTelegramLink('https://t.me/' + p.username);
         }
+        box.appendChild(row);
+    });
+}
 
-        function shareResultToGroup() {
-            const accuracy = Math.round((score / activeQuestions.length) * 100);
-            const text = `🏆 የኦርቶዶክስ ተዋሕዶ ውጤቴ!\n\n👤 ${currentUser.first_name||'ተጫዋች'}\n📚 ${getCatName(selectedSubCat||selectedMainCat)}\n🎯 \( {score}/ \){activeQuestions.length} (\( {accuracy}%)\n⭐ + \){quizPoints} ነጥብ\n🔥 Max Streak: ${maxStreak}x\n\nተወዳደሩ 👇`;
-            const url = `https://t.me/share/url?url=https://t.me/\( {BOT_USERNAME}&text= \){encodeURIComponent(text)}`;
-            tg.openTelegramLink(url);
-        }
+function resetLB() {
+    if (confirm('የሳምንቱን ደረጃ ሰንጠረዥ ማደስ ይፈልጋሉ?')) {
+        localStorage.removeItem('ortho_lb');
+        updateWeekly();
+        tg.showAlert('ተደስቷል');
+        goBack();
+    }
+}
 
-        function startMissedRetake() {
-            activeQuestions = [...missedQuestions];
-            currentQuestionIndex = 0; score = 0; quizPoints = 0;
-            currentStreak = 0; answerTimes = []; missedQuestions = [];
-            navigateTo('screenQuiz');
-            renderQuestion();
-        }
+function uploadJSON() { document.getElementById('fileIn').click(); }
+function onFile(e) {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+        try {
+            const data = JSON.parse(ev.target.result);
+            if (!Array.isArray(data)) { tg.showAlert('JSON Array መሆን አለበት'); return; }
+            const name = f.name.replace('.json','') + '_' + Date.now().toString().slice(-4);
+            banks[name] = data;
+            localStorage.setItem('ortho_banks', JSON.stringify(banks));
+            bank = data;
+            localStorage.setItem('ortho_active', name);
+            localStorage.setItem('ortho_bank', JSON.stringify(data));
+            tg.showAlert(`✅ ${data.length} ጥያቄ ተጭኗል\nባንክ: ${name}`);
+            document.getElementById('aQ').textContent = data.length;
+            document.getElementById('aB').textContent = Object.keys(banks).length;
+        } catch(err) { tg.showAlert('ፋይሉን ማንበብ አልተቻለም'); }
+    };
+    r.readAsText(f);
+}
 
-        function resetToHome() {
-            screenHistory = ['screenMainMenu'];
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('screenMainMenu').classList.add('active');
-            document.getElementById('backBar').style.display = 'none';
-            updateWeeklySpotlight();
-        }
-
-        // Leaderboard
-        function saveLeaderboardScore() {
-            let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-            board.push({
-                id: currentUserId,
-                name: currentUser.first_name || 'ተጫዋች',
-                username: currentUser.username || '',
-                photo: currentUser.photo_url || '',
-                points: quizPoints,
-                date: new Date().toLocaleDateString('am-ET')
-            });
-            board.sort((a,b) => b.points - a.points);
-            board = board.slice(0, 15);
-            localStorage.setItem('ortho_leaderboard', JSON.stringify(board));
-        }
-
-        function updateWeeklySpotlight() {
-            const board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-            if (board.length) {
-                document.getElementById('weeklyHeroName').innerText = board[0].name;
-                document.getElementById('weeklyHeroScore').innerText = board[0].points + ' ነጥብ';
-            }
-        }
-
-        function openLeaderboard() {
-            navigateTo('screenLeaderboard');
-            const list = document.getElementById('leaderboardList');
-            list.innerHTML = '';
-            const board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
-            if (!board.length) {
-                list.innerHTML = '<p style="text-align:center;opacity:.7;padding:20px;">እስካሁን ውጤት የለም</p>';
-                return;
-            }
-            board.forEach((item, i) => {
-                const row = document.createElement('div');
-                row.className = 'leaderboard-item';
-                const avatar = item.photo
-                    ? `<img src="${item.photo}" alt="">`
-                    : '👤';
-                const namePart = isAdmin && item.username
-                    ? `<span style="cursor:pointer;text-decoration:underline;" onclick="tg.openTelegramLink('https://t.me/\( {item.username}')"> \){item.name}</span>`
-                    : `<strong>${item.name}</strong>`;
-                row.innerHTML = `
-                    <div class="lb-avatar">${avatar}</div>
-                    <div style="flex:1;">
-                        <div>#${i+1} ${namePart}</div>
-                        <div style="font-size:0.72rem;opacity:.7;">${item.date || ''}</div>
-                    </div>
-                    <div style="font-weight:700;color:var(--gold);">⭐ ${item.points}</div>
-                `;
-                list.appendChild(row);
-            });
-        }
-
-        // Achievements
-        function unlockAchievement(id) {
-            if (unlockedAchievements.includes(id)) return;
-            unlockedAchievements.push(id);
-            localStorage.setItem('ortho_achievements', JSON.stringify(unlockedAchievements));
-            const a = ALL_ACHIEVEMENTS.find(x => x.id === id);
-            if (a) setTimeout(() => showAchPopup(a.icon, a.title, a.desc), 400);
-        }
-        function showAchPopup(icon, title, desc) {
-            document.getElementById('achIcon').innerText = icon;
-            document.getElementById('achTitle').innerText = title;
-            document.getElementById('achDesc').innerText = desc;
-            document.getElementById('achPopup').classList.add('show');
-        }
-        function closeAchPopup() { document.getElementById('achPopup').classList.remove('show'); }
-
-        function openAchievements() {
-            navigateTo('screenAchievements');
-            const list = document.getElementById('achievementsList');
-            list.innerHTML = '';
-            ALL_ACHIEVEMENTS.forEach(a => {
-                const unlocked = unlockedAchievements.includes(a.id);
-                const div = document.createElement('div');
-                div.style.cssText = `display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);opacity:${unlocked?1:0.4}`;
-                div.innerHTML = `
-                    <div style="font-size:1.6rem;">${a.icon}</div>
-                    <div>
-                        <div style="font-weight:700;">${a.title}</div>
-                        <div style="font-size:0.75rem;opacity:.8;">${a.desc}</div>
-                    </div>
-                    <div style="margin-left:auto;">${unlocked ? '✅' : '🔒'}</div>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        // Admin
-        function openAdminHub() {
-            navigateTo('screenAdmin');
-            document.getElementById('adminTotalQuestions').innerText = questionBank.length;
-            document.getElementById('adminTotalPlayers').innerText = Object.keys(playerRegistry).length;
-            document.getElementById('adminBankCount').innerText = Object.keys(questionBanks).length;
-
-            const list = document.getElementById('adminPlayerList');
-            list.innerHTML = '';
-            Object.values(playerRegistry).sort((a,b)=>b.totalPoints-a.totalPoints).forEach(p => {
-                const row = document.createElement('div');
-                row.className = 'admin-row';
-                row.innerHTML = `
-                    <span>${p.name} ${p.username ? '@'+p.username : ''}<br><small style="opacity:.6">ID: ${p.id}</small></span>
-                    <span style="color:var(--gold);font-weight:700;">${p.totalPoints}</span>
-                `;
-                if (p.username) {
-                    row.style.cursor = 'pointer';
-                    row.onclick = () => tg.openTelegramLink('https://t.me/' + p.username);
-                }
-                list.appendChild(row);
-            });
-        }
-
-        function resetWeeklyLeaderboard() {
-            if (confirm('የሳምንቱን ደረጃ ሰንጠረዥ ማደስ ይፈልጋሉ?')) {
-                localStorage.removeItem('ortho_leaderboard');
-                updateWeeklySpotlight();
-                tg.showAlert('ተደስቷል');
-                goBack();
-            }
-        }
-
-        function triggerFileUpload() { document.getElementById('jsonFileInput').click(); }
-
-        function handleFileUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                try {
-                    const data = JSON.parse(ev.target.result);
-                    if (!Array.isArray(data)) { tg.showAlert('JSON Array መሆን አለበት'); return; }
-                    const name = file.name.replace('.json','') + '_' + Date.now().toString().slice(-4);
-                    questionBanks[name] = data;
-                    localStorage.setItem('ortho_banks', JSON.stringify(questionBanks));
-                    questionBank = data;
-                    activeBankName = name;
-                    localStorage.setItem('ortho_active_bank', name);
-                    localStorage.setItem('ortho_question_bank', JSON.stringify(data));
-                    tg.showAlert(`✅ ${data.length} ጥያቄ ተጭኗል\nባንክ: ${name}`);
-                    document.getElementById('adminTotalQuestions').innerText = data.length;
-                    document.getElementById('adminBankCount').innerText = Object.keys(questionBanks).length;
-                } catch (err) {
-                    tg.showAlert('ፋይሉን ማንበብ አልተቻለም');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function showBankSelector() {
-            const names = Object.keys(questionBanks);
-            if (!names.length) { tg.showAlert('ባንክ የለም'); return; }
-            const choice = prompt('ባንክ ምረጥ:\n' + names.map((n,i)=>`${i+1}. \( {n} ( \){questionBanks[n].length})`).join('\n'));
-            const idx = parseInt(choice) - 1;
-            if (idx >= 0 && idx < names.length) {
-                activeBankName = names[idx];
-                questionBank = questionBanks[activeBankName];
-                localStorage.setItem('ortho_active_bank', activeBankName);
-                localStorage.setItem('ortho_question_bank', JSON.stringify(questionBank));
-                tg.showAlert('ባንክ ተቀይሯል: ' + activeBankName);
-            }
-        }
-    </script>
+function selectBank() {
+    const names = Object.keys(banks);
+    if (!names.length) { tg.showAlert('ባንክ የለም'); return; }
+    const choice = prompt('ባንክ ምረጥ:\n' + names.map((n,i)=>`${i+1}. \( {n} ( \){banks[n].length})`).join('\n'));
+    const i = parseInt(choice)-1;
+    if (i >= 0 && i < names.length) {
+        bank = banks[names[i]];
+        localStorage.setItem('ortho_active', names[i]);
+        localStorage.setItem('ortho_bank', JSON.stringify(bank));
+        tg.showAlert('ባንክ ተቀይሯል: ' + names[i]);
+    }
+}
+</script>
 </body>
-                                                                                              </html>
+    </html>
