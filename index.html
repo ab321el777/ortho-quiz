@@ -21,6 +21,17 @@
             --correct-green: #2E7D32;
             --incorrect-red: #C62828;
             --streak-orange: #FF6D00;
+            --border-color: rgba(212, 175, 55, 0.25);
+        }
+
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --bg-color: #0F172A;
+            --card-bg: #1E293B;
+            --text-color: #F8FAFC;
+            --text-muted: #94A3B8;
+            --primary-blue: #38BDF8;
+            --border-color: rgba(212, 175, 55, 0.4);
         }
 
         * {
@@ -38,12 +49,14 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         header {
+            position: relative;
             text-align: center;
-            padding: 10px 0;
-            background: linear-gradient(135deg, var(--primary-blue), #2C5282);
+            padding: 12px 0;
+            background: linear-gradient(135deg, #1A365D, #2C5282);
             color: white;
             border-radius: 12px;
             margin-bottom: 12px;
@@ -52,7 +65,7 @@
         }
 
         header h1 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--primary-gold);
             margin-bottom: 2px;
         }
@@ -62,19 +75,32 @@
             opacity: 0.9;
         }
 
+        .theme-toggle-btn {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
         .user-banner {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--card-bg);
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 10px;
             margin-bottom: 12px;
             font-size: 0.85rem;
             font-weight: bold;
-            color: var(--primary-blue);
+            color: var(--text-color);
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid var(--border-color);
         }
 
         .screen {
@@ -93,7 +119,7 @@
             border-radius: 12px;
             padding: 14px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            border: 1px solid var(--border-color);
         }
 
         .category-grid {
@@ -104,8 +130,8 @@
 
         .btn {
             background: var(--card-bg);
-            color: var(--primary-blue);
-            border: 1.5px solid #E2E8F0;
+            color: var(--text-color);
+            border: 1.5px solid var(--border-color);
             padding: 12px 14px;
             border-radius: 10px;
             font-size: 0.95rem;
@@ -116,12 +142,10 @@
             justify-content: space-between;
             align-items: center;
             transition: all 0.15s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .btn:active {
             transform: scale(0.98);
-            background: #EDF2F7;
         }
 
         .btn-gold {
@@ -131,20 +155,26 @@
             box-shadow: 0 3px 8px rgba(183, 129, 3, 0.3);
         }
 
+        .btn-share {
+            background: linear-gradient(135deg, #0088cc, #006699);
+            color: white;
+            border: none;
+            box-shadow: 0 3px 8px rgba(0, 136, 204, 0.3);
+        }
+
         .btn-primary {
-            background: var(--primary-blue);
+            background: #1A365D;
             color: white;
             border: none;
         }
 
-        /* Stats & Quiz Details */
         .quiz-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
             font-size: 0.85rem;
-            color: var(--primary-blue);
+            color: var(--text-color);
             margin-bottom: 6px;
         }
 
@@ -156,17 +186,11 @@
             border: 1px solid var(--streak-orange);
             font-size: 0.8rem;
             display: none;
-            animation: pulse 1s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
         }
 
         .timer-bar {
             height: 8px;
-            background: #E2E8F0;
+            background: rgba(226, 232, 240, 0.3);
             border-radius: 4px;
             overflow: hidden;
             margin-bottom: 12px;
@@ -176,7 +200,7 @@
             height: 100%;
             background: var(--correct-green);
             width: 100%;
-            transition: width 1s linear, background-color 0.3s;
+            transition: width 1s linear;
         }
 
         .question-text {
@@ -184,7 +208,7 @@
             font-weight: 600;
             line-height: 1.5;
             margin-bottom: 14px;
-            color: #1A202C;
+            color: var(--text-color);
         }
 
         .options-list {
@@ -194,16 +218,15 @@
         }
 
         .option-btn {
-            background: #F7FAFC;
-            color: #2D3748;
-            border: 1.5px solid #E2E8F0;
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1.5px solid var(--border-color);
             padding: 12px;
             border-radius: 8px;
             text-align: left;
             font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
         .option-btn.correct {
@@ -223,7 +246,7 @@
         .explanation-box {
             margin-top: 12px;
             padding: 10px 12px;
-            background: #FFFDF0;
+            background: rgba(212, 175, 55, 0.1);
             border-left: 4px solid var(--primary-gold);
             border-radius: 6px;
             font-size: 0.85rem;
@@ -231,12 +254,6 @@
             display: none;
         }
 
-        .explanation-box h4 {
-            color: var(--dark-gold);
-            margin-bottom: 3px;
-        }
-
-        /* Results & Leaderboard */
         .results-summary {
             text-align: center;
             padding: 16px 8px;
@@ -245,15 +262,8 @@
         .score-badge {
             font-size: 2.2rem;
             font-weight: 800;
-            color: var(--primary-blue);
+            color: var(--primary-gold);
             margin: 6px 0;
-        }
-
-        .points-earned {
-            font-size: 1.1rem;
-            color: var(--dark-gold);
-            font-weight: bold;
-            margin-bottom: 10px;
         }
 
         .stats-grid {
@@ -262,7 +272,7 @@
             gap: 6px;
             margin: 12px 0;
             padding: 10px;
-            background: #EDF2F7;
+            background: rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             font-size: 0.75rem;
             text-align: center;
@@ -277,29 +287,23 @@
         }
 
         .badge-chip {
-            background: #FFF8E1;
+            background: rgba(212, 175, 55, 0.2);
             border: 1px solid var(--primary-gold);
-            color: #8D6E63;
+            color: var(--text-color);
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 0.75rem;
             font-weight: bold;
         }
 
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 8px;
-        }
-
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             padding: 8px 10px;
-            background: #F7FAFC;
+            background: rgba(0, 0, 0, 0.03);
             border-radius: 6px;
             font-size: 0.85rem;
+            margin-bottom: 6px;
             border-left: 3px solid var(--primary-gold);
         }
 
@@ -309,8 +313,8 @@
         }
 
         .back-btn {
-            background: #E2E8F0;
-            color: #4A5568;
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--text-color);
             border: none;
             padding: 6px 12px;
             border-radius: 6px;
@@ -325,6 +329,7 @@
     <header>
         <h1>ኢትዮጵያ ኦርቶዶክስ ተዋሕዶ ቤተክርስቲያን</h1>
         <p>የሃይማኖት ትምህርት እና ጥያቄ-መልስ ማዕከል</p>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
     </header>
 
     <div class="user-banner">
@@ -338,6 +343,17 @@
 
     <!-- SCREEN 1: MAIN MENU -->
     <div id="screenMainMenu" class="screen active">
+        <!-- Player of the Week Banner -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(26, 54, 93, 0.05)); border: 1px solid var(--primary-gold);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="font-size: 0.75rem; font-weight: bold; color: var(--dark-gold);">👑 የሳምንቱ ምርጥ ተጫዋች</span>
+                    <h4 id="weeklyHeroName" style="margin-top: 2px;">እስካሁን አልተወሰነም</h4>
+                </div>
+                <span id="weeklyHeroScore" style="font-size: 1.1rem; font-weight: bold; color: var(--primary-gold);">0 ነጥብ</span>
+            </div>
+        </div>
+
         <div class="category-grid">
             <button class="btn btn-gold" onclick="selectMainCategory('Ye-Tekalale')"><span>የተቀላቀለ ጥያቄዎች</span> <span>🎲</span></button>
             <button class="btn" onclick="selectMainCategory('Ye-Adminu_Ye-Zare_Tyaqewoch')"><span>የአድሚኑ የዛሬ ጥያቄዎች</span> <span>📅</span></button>
@@ -357,16 +373,15 @@
 
         <div style="margin-top: 10px; display: flex; gap: 8px;">
             <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="openLeaderboard()">🏆 የደረጃ ሰንጠረዥ</button>
-            <button class="btn" style="flex: 1; justify-content: center;" onclick="triggerFileUpload()">📥 ጥያቄዎችን አስገባ</button>
+            <button id="adminHubBtn" class="btn btn-gold" style="flex: 1; justify-content: center; display: none;" onclick="openAdminHub()">🛡️ የአድሚን ማዕከል</button>
         </div>
-        <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleFileUpload(event)">
     </div>
 
     <!-- SCREEN 2: FIVE PILLARS MENU -->
     <div id="screenMysteriesMenu" class="screen">
         <div class="card">
             <h3>🏛️ አምስቱ አእማደ ምስጢራት</h3>
-            <p style="font-size: 0.8rem; color: #666; margin-top: 4px;">እባክዎን የሚማሩበትን ምስጢር ይምረጡ፡</p>
+            <p style="font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">እባክዎን የሚማሩበትን ምስጢር ይምረጡ፡</p>
         </div>
         <div class="category-grid">
             <button class="btn" onclick="selectSubCategory('Mstire_Selasie')"><span>ምሥጢረ ሥላሴ</span> <span>1️⃣</span></button>
@@ -382,7 +397,7 @@
     <div id="screenCountMenu" class="screen">
         <div class="card">
             <h3 id="selectedCategoryTitle">ምድብ: -</h3>
-            <p style="font-size: 0.8rem; color: #666; margin-top: 4px;">ስንት ጥያቄዎችን መሥራት ይፈልጋሉ?</p>
+            <p style="font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">ስንት ጥያቄዎችን መሥራት ይፈልጋሉ?</p>
         </div>
         <div class="category-grid">
             <button class="btn" onclick="startQuiz(5)"><span>5 ጥያቄዎች</span> <span>⚡</span></button>
@@ -424,7 +439,7 @@
         <div class="card results-summary">
             <h3>🏆 የጨዋታው ውጤት</h3>
             <div id="finalScoreBadge" class="score-badge">0 / 0</div>
-            <div id="pointsEarnedText" class="points-earned">+0 ነጥብ አግኝተዋል!</div>
+            <div id="pointsEarnedText" style="font-size: 1.1rem; color: var(--primary-gold); font-weight: bold; margin-bottom: 8px;">+0 ነጥብ አግኝተዋል!</div>
             <p id="accuracyText">ትክክለኛነት: 0%</p>
 
             <div class="stats-grid">
@@ -435,9 +450,10 @@
 
             <div id="badgesContainer" class="badges-container"></div>
 
-            <p id="feedbackMessage" style="margin: 10px 0; font-weight: bold; color: var(--primary-blue);"></p>
+            <p id="feedbackMessage" style="margin: 10px 0; font-weight: bold; color: var(--primary-gold);"></p>
         </div>
 
+        <button class="btn btn-share" style="justify-content: center; font-size: 1rem;" onclick="shareResultToGroup()">📤 ውጤቴን ለግሩፕ አጋራ (Share to Group)</button>
         <button id="retakeMissedBtn" class="btn btn-gold" style="display: none; justify-content: center;" onclick="startMissedRetake()">🔄 የተሳሳቱትን ብቻ ደግመው ይሥሩ</button>
         <button class="btn btn-primary" style="justify-content: center;" onclick="resetToHome()">🏠 ወደ ዋናው ምናሌ ተመለስ</button>
     </div>
@@ -446,39 +462,45 @@
     <div id="screenLeaderboard" class="screen">
         <div class="card">
             <h3>🏆 የከፍተኛ ነጥብ ባለቤቶች</h3>
-            <div id="leaderboardList" class="leaderboard-list"></div>
+            <div id="leaderboardList" style="margin-top: 10px;"></div>
         </div>
         <button class="btn btn-primary" style="justify-content: center;" onclick="goBack()">ወደ ዋናው ምናሌ ተመለስ</button>
     </div>
 
+    <!-- SCREEN 7: ADMIN DASHBOARD -->
+    <div id="screenAdmin" class="screen">
+        <div class="card">
+            <h3>🛡️ የአድሚን ማዕከል (Admin Control Panel)</h3>
+            <div style="margin: 12px 0; font-size: 0.85rem; line-height: 1.6;">
+                <p>📊 <strong>የተጫዋቾች ስታቲስቲክስ፡</strong></p>
+                <ul style="margin-left: 18px; margin-top: 4px;">
+                    <li>ጠቅላላ የተጫወቱ ተጫዋቾች: <strong id="adminTotalPlayers">1</strong></li>
+                    <li>የተጫኑ ጥያቄዎች ብዛት: <strong id="adminTotalQuestions">0</strong></li>
+                </ul>
+            </div>
+            
+            <button class="btn btn-gold" style="width: 100%; justify-content: center; margin-bottom: 8px;" onclick="triggerFileUpload()">📥 አዲስ የጥያቄ ፋይል አስገባ (JSON Upload)</button>
+            <button class="btn" style="width: 100%; justify-content: center; color: var(--incorrect-red);" onclick="resetWeeklyLeaderboard()">🔄 የሳምንቱን የደረጃ ሰንጠረዥ አድስ (Reset)</button>
+        </div>
+        <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleFileUpload(event)">
+        <button class="btn btn-primary" style="justify-content: center;" onclick="goBack()">ወደ ዋናው ምናሌ ተመለስ</button>
+    </div>
+
     <script>
-        // Initialize Telegram WebApp SDK
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Audio Context for Sound Effects
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(type) {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
+        // Authorized Admin Telegram User IDs (Abel & Nisiha Gba)
+        const ADMIN_IDS = [273799643, 6936902038];
+        const currentUserId = tg.initDataUnsafe?.user?.id;
 
-                if (type === 'correct') {
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); // A5
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.25);
-                } else if (type === 'incorrect') {
-                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-                    osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.1); // E3
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                }
-            } catch (e) { console.log(e); }
+        // Theme Toggle
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            document.getElementById('themeBtn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('ortho_theme', newTheme);
         }
 
         // Global Game States
@@ -497,14 +519,24 @@
         let missedQuestions = [];
         let questionBank = [];
 
-        // User Data
         let userName = tg.initDataUnsafe?.user?.first_name || "ተጫዋች";
         let totalPoints = parseInt(localStorage.getItem('ortho_total_points') || '0');
 
         window.onload = function() {
+            // Restore theme
+            const savedTheme = localStorage.getItem('ortho_theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+
             document.getElementById('userNameDisplay').innerText = `👤 ተጫዋች: ${userName}`;
             updateTotalPointsDisplay();
             loadQuestionBank();
+            updateWeeklySpotlight();
+
+            // Reveal Admin Panel if authorized
+            if (ADMIN_IDS.includes(currentUserId)) {
+                document.getElementById('adminHubBtn').style.display = 'flex';
+            }
         };
 
         function updateTotalPointsDisplay() {
@@ -544,7 +576,7 @@
             ];
         }
 
-        // Navigation Engine
+        // Navigation
         function navigateTo(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
@@ -616,7 +648,7 @@
             return names[key] || key;
         }
 
-        // Quiz Logic & Gamification
+        // Quiz Logic
         function startQuiz(countReq) {
             let filtered = questionBank.filter(q => {
                 if (selectedSubCat) {
@@ -658,7 +690,6 @@
             document.getElementById('quizCategoryBadge').innerText = getAmharicCategoryName(q.subcategory || q.category);
             document.getElementById('questionText').innerText = q.question;
 
-            // Streak Badge
             const streakBadge = document.getElementById('streakBadge');
             if (currentStreak >= 2) {
                 streakBadge.innerText = `🔥 ${currentStreak}x Streak!`;
@@ -685,19 +716,14 @@
                 optsList.appendChild(btn);
             });
 
-            // 20-Second Countdown Timer
             questionStartTime = Date.now();
             let timeLeft = 20;
             const timerBar = document.getElementById('timerProgress');
             timerBar.style.width = '100%';
-            timerBar.style.backgroundColor = 'var(--correct-green)';
 
             timerInterval = setInterval(() => {
                 timeLeft--;
                 timerBar.style.width = `${(timeLeft / 20) * 100}%`;
-                if (timeLeft <= 5) timerBar.style.backgroundColor = 'var(--incorrect-red)';
-                else if (timeLeft <= 10) timerBar.style.backgroundColor = 'var(--primary-gold)';
-
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     checkAnswer('TIMEOUT', null);
@@ -721,24 +747,20 @@
                 currentStreak++;
                 if (currentStreak > maxStreak) maxStreak = currentStreak;
 
-                // Points = 100 Base + Speed Bonus (up to 50) * Streak Multiplier
                 let speedBonus = Math.max(0, 20 - elapsed) * 2.5;
                 let multiplier = currentStreak >= 3 ? 1.5 : 1;
                 let pointsEarned = Math.round((100 + speedBonus) * multiplier);
                 quizPoints += pointsEarned;
 
                 if (btnElement) btnElement.classList.add('correct');
-                playSound('correct');
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             } else {
                 currentStreak = 0;
                 missedQuestions.push(q);
                 if (btnElement) btnElement.classList.add('incorrect');
-                
                 allButtons.forEach(b => {
                     if (b.innerText.startsWith(q.answer)) b.classList.add('correct');
                 });
-                playSound('incorrect');
                 if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
             }
 
@@ -768,6 +790,7 @@
             totalPoints += quizPoints;
             updateTotalPointsDisplay();
             saveLeaderboardScore(userName, quizPoints);
+            updateWeeklySpotlight();
 
             document.getElementById('finalScoreBadge').innerText = `${score} / ${total}`;
             document.getElementById('pointsEarnedText').innerText = `+${quizPoints} ነጥብ አግኝተዋል!`;
@@ -781,7 +804,6 @@
             document.getElementById('avgTimeText').innerText = `${avgTime}s`;
             document.getElementById('maxTimeText').innerText = `${maxTime}s`;
 
-            // Render Badges Earned
             const badgesBox = document.getElementById('badgesContainer');
             badgesBox.innerHTML = '';
             if (accuracy === 100) badgesBox.innerHTML += `<span class="badge-chip">🏆 የ100% ሊቅ</span>`;
@@ -804,6 +826,26 @@
             document.getElementById('feedbackMessage').innerText = msg;
         }
 
+        // Automatic Group Share Feature
+        function shareResultToGroup() {
+            const botUsername = "YOUR_BOT_USERNAME"; // Replace with your bot handle without @
+            const categoryName = getAmharicCategoryName(selectedSubCat || selectedMainCat);
+            const total = activeQuestions.length;
+            const accuracy = Math.round((score / total) * 100);
+
+            const shareText = `🏆 የኦርቶዶክስ ተዋሕዶ ትምህርት የጨዋታ ውጤቴ!\n\n` +
+                `👤 ተጫዋች: ${userName}\n` +
+                `📚 ምድብ: ${categoryName}\n` +
+                `🎯 ውጤት: ${score}/${total} (${accuracy}%)\n` +
+                `⭐ ያገኘሁት ነጥብ: ${quizPoints}\n` +
+                `🔥 Max Streak: ${maxStreak}x\n\n` +
+                `እንኳን ለኦርቶዶክስ ተዋሕዶ ሃይማኖታችን እውቀት አበቃን! 🙏\n` +
+                `የእኔን ሪከርድ መስበር ትችላላችሁ? ከታች ያለውን ቦት በመንካት ይወዳደሩ! 👇`;
+
+            const telegramShareUrl = `https://t.me/share/url?url=https://t.me/${botUsername}&text=${encodeURIComponent(shareText)}`;
+            tg.openTelegramLink(telegramShareUrl);
+        }
+
         function startMissedRetake() {
             activeQuestions = [...missedQuestions];
             currentQuestionIndex = 0;
@@ -823,13 +865,21 @@
             document.getElementById('backBar').style.display = 'none';
         }
 
-        // Leaderboard Management
+        // Leaderboard & Weekly Spotlight
         function saveLeaderboardScore(name, pts) {
             let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
             board.push({ name: name, points: pts, date: new Date().toLocaleDateString('am-ET') });
             board.sort((a, b) => b.points - a.points);
-            board = board.slice(0, 5); // Keep top 5
+            board = board.slice(0, 10);
             localStorage.setItem('ortho_leaderboard', JSON.stringify(board));
+        }
+
+        function updateWeeklySpotlight() {
+            let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
+            if (board.length > 0) {
+                document.getElementById('weeklyHeroName').innerText = board[0].name;
+                document.getElementById('weeklyHeroScore').innerText = `${board[0].points} ነጥብ`;
+            }
         }
 
         function openLeaderboard() {
@@ -839,7 +889,7 @@
             let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
 
             if (board.length === 0) {
-                list.innerHTML = '<p style="text-align:center; color:#888;">እስካሁን ምንም የተመዘገበ ከፍተኛ ነጥብ የለም።</p>';
+                list.innerHTML = '<p style="text-align:center; opacity:0.7;">እስካሁን ምንም የተመዘገበ ከፍተኛ ነጥብ የለም።</p>';
                 return;
             }
 
@@ -851,7 +901,23 @@
             });
         }
 
-        // Admin File Upload Handlers
+        // Admin Dashboard Functions
+        function openAdminHub() {
+            navigateTo('screenAdmin');
+            document.getElementById('adminTotalQuestions').innerText = questionBank.length;
+            let board = JSON.parse(localStorage.getItem('ortho_leaderboard') || '[]');
+            document.getElementById('adminTotalPlayers').innerText = Math.max(1, board.length);
+        }
+
+        function resetWeeklyLeaderboard() {
+            if (confirm("እርግጠኛ ነዎት የሳምንቱን ደረጃ ሰንጠረዥ ማደስ ይፈልጋሉ?")) {
+                localStorage.removeItem('ortho_leaderboard');
+                updateWeeklySpotlight();
+                alert("የደረጃ ሰንጠረዡ በሁኔታው ተ obnovlen!");
+                goBack();
+            }
+        }
+
         function triggerFileUpload() {
             document.getElementById('jsonFileInput').click();
         }
@@ -868,6 +934,7 @@
                         questionBank = importedData;
                         localStorage.setItem('ortho_question_bank', JSON.stringify(importedData));
                         alert(`በትክክል ተጫኗል! ${importedData.length} ጥያቄዎች ገብተዋል።`);
+                        document.getElementById('adminTotalQuestions').innerText = importedData.length;
                     } else {
                         alert("የፋይሉ ቅርጽ ትክክል አይደለም! JSON Array መሆን አለበት።");
                     }
