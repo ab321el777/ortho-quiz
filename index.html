@@ -27,7 +27,6 @@
             --text: #0F172A;
             --muted: #64748B;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             background: var(--navy);
@@ -38,8 +37,6 @@
             flex-direction: column;
             overflow: hidden;
         }
-
-        /* Header */
         header {
             flex-shrink: 0;
             background: linear-gradient(135deg, #0B1426 0%, #1E3A5F 100%);
@@ -49,7 +46,7 @@
             position: relative;
         }
         [data-theme="light"] header { background: linear-gradient(135deg, #1E3A5F, #2B4C7E); }
-        header h1 { font-size: 1.08rem; color: var(--gold); font-weight: 700; letter-spacing: 0.3px; }
+        header h1 { font-size: 1.08rem; color: var(--gold); font-weight: 700; }
         header p { font-size: 0.72rem; opacity: 0.85; margin-top: 2px; }
         .theme-btn {
             position: absolute; top: 10px; right: 12px;
@@ -57,8 +54,6 @@
             background: rgba(255,255,255,0.12); border: none; color: white;
             font-size: 1.15rem; display: flex; align-items: center; justify-content: center;
         }
-
-        /* User bar */
         .user-bar {
             flex-shrink: 0;
             margin: 8px 10px 0;
@@ -67,7 +62,6 @@
             padding: 9px 12px;
             display: flex; justify-content: space-between; align-items: center;
             border: 1px solid rgba(212,175,55,0.25);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         .user-bar .name { font-size: 0.84rem; font-weight: 600; }
         .level-badge {
@@ -76,20 +70,14 @@
             padding: 3px 9px; border-radius: 20px;
         }
         .points { font-size: 0.82rem; font-weight: 700; color: var(--gold); }
-
-        /* Back */
         .back-bar { flex-shrink: 0; padding: 4px 10px; display: none; }
         .back-btn {
             background: rgba(255,255,255,0.08); border: none; color: var(--text);
             padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
         }
-
-        /* Screens */
         .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; padding: 8px 10px calc(8px + var(--safe)); }
         .screen.active { display: flex; }
         .scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-
-        /* Cards & Buttons */
         .card {
             background: var(--card);
             border-radius: 14px;
@@ -107,7 +95,6 @@
             font-weight: 600;
             display: flex; justify-content: space-between; align-items: center;
             cursor: pointer;
-            transition: transform 0.1s;
         }
         .btn:active { transform: scale(0.97); }
         .btn-gold {
@@ -122,8 +109,6 @@
             color: white; border: none; justify-content: center;
         }
         .grid { display: flex; flex-direction: column; gap: 7px; }
-
-        /* Hero */
         .hero {
             background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(30,58,95,0.3));
             border: 1px solid rgba(212,175,55,0.4);
@@ -135,14 +120,10 @@
         .hero-label { font-size: 0.68rem; font-weight: 700; color: var(--gold); }
         .hero-name { font-weight: 700; font-size: 0.92rem; margin-top: 1px; }
         .hero-score { font-size: 1.05rem; font-weight: 800; color: var(--gold); }
-
-        /* XP */
         .xp-box { padding: 9px 12px; }
         .xp-top { display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px; }
         .xp-bar { height: 7px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
-        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 6px; transition: width 0.4s; }
-
-        /* Quiz */
+        .xp-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 6px; }
         .quiz-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
         .streak { background: #431407; color: var(--orange); padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; display: none; }
         .timer-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
@@ -164,15 +145,11 @@
             background: rgba(212,175,55,0.1); border-left: 4px solid var(--gold);
             border-radius: 8px; font-size: 0.8rem; display: none;
         }
-
-        /* Results */
         .res-score { font-size: 2.2rem; font-weight: 800; color: var(--gold); margin: 6px 0; }
         .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 10px 0; }
         .stat { background: rgba(0,0,0,0.18); border-radius: 10px; padding: 7px 4px; text-align: center; font-size: 0.72rem; }
         .badges { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 8px 0; }
         .chip { background: rgba(212,175,55,0.18); border: 1px solid var(--gold); padding: 3px 9px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; }
-
-        /* Leaderboard */
         .lb-item {
             display: flex; align-items: center; gap: 10px;
             padding: 9px 11px; background: rgba(0,0,0,0.15);
@@ -186,8 +163,6 @@
             overflow: hidden; flex-shrink: 0; font-size: 1.2rem;
         }
         .lb-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Popup */
         .popup {
             position: fixed; inset: 0; background: rgba(0,0,0,0.75);
             display: none; align-items: center; justify-content: center;
@@ -197,10 +172,8 @@
         .popup-box {
             background: var(--card); border-radius: 18px; padding: 22px;
             max-width: 300px; width: 100%; text-align: center;
-            border: 2px solid var(--gold); animation: pop 0.35s ease;
+            border: 2px solid var(--gold);
         }
-        @keyframes pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
         .admin-row {
             display: flex; justify-content: space-between; align-items: center;
             padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -237,7 +210,6 @@
                 </div>
                 <div class="hero-score" id="weeklyScore">0</div>
             </div>
-
             <div class="card xp-box">
                 <div class="xp-top">
                     <span id="levelTitle">አዲስ ተማሪ</span>
@@ -245,7 +217,6 @@
                 </div>
                 <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
             </div>
-
             <div class="grid" style="margin-top:6px;">
                 <button class="btn btn-gold" onclick="pickCat('Ye-Tekalale')"><span>🎲 የተቀላቀለ</span></button>
                 <button class="btn" onclick="pickCat('Ye-Adminu_Ye-Zare_Tyaqewoch')"><span>📅 የዛሬ ጥያቄዎች</span></button>
@@ -262,7 +233,6 @@
                 <button class="btn" onclick="pickCat('Aqabe_Emnet_Protestant')"><span>🛡️ አቃቤ እምነት (ፕሮቴስታንት)</span></button>
                 <button class="btn" onclick="pickCat('Aqabe_Emnet_Muslim')"><span>🛡️ አቃቤ እምነት (ሙስሊም)</span></button>
             </div>
-
             <div style="display:flex;gap:7px;margin-top:10px;">
                 <button class="btn btn-primary" style="flex:1;" onclick="openLB()">🏆 ደረጃ</button>
                 <button class="btn btn-primary" style="flex:1;" onclick="openAch()">🎖️ ሽልማት</button>
@@ -386,7 +356,6 @@
         <button class="btn btn-primary" style="margin-top:8px;" onclick="goBack()">ተመለስ</button>
     </div>
 
-    <!-- Popup -->
     <div class="popup" id="popup">
         <div class="popup-box">
             <div style="font-size:2.6rem;margin-bottom:6px;" id="pIcon">🏆</div>
@@ -402,7 +371,7 @@ tg.expand();
 tg.enableClosingConfirmation();
 
 const ADMIN_IDS = [273799643, 6936902038];
-const BOT_USERNAME = "EOChristian_bot";   // ← your bot username
+const BOT_USERNAME = "EOChristian_bot";
 
 const user = tg.initDataUnsafe?.user || {};
 const uid = user.id;
@@ -444,8 +413,7 @@ window.onload = () => {
     const th = localStorage.getItem('ortho_theme') || 'dark';
     document.body.setAttribute('data-theme', th);
     document.getElementById('themeBtn').textContent = th === 'dark' ? '☀️' : '🌙';
-
-    document.getElementById('userName').textContent = `👤 ${user.first_name || 'ተጫዋች'}`;
+    document.getElementById('userName').textContent = '👤 ' + (user.first_name || 'ተጫዋች');
     updateXP();
     loadBank();
     updateWeekly();
@@ -461,7 +429,7 @@ function register() {
         name: user.first_name || 'ተጫዋች',
         username: user.username || '',
         photo: user.photo_url || '',
-        totalPoints,
+        totalPoints: totalPoints,
         last: new Date().toISOString()
     };
     localStorage.setItem('ortho_players', JSON.stringify(players));
@@ -469,20 +437,20 @@ function register() {
 
 function getLevel(p) {
     let lv = LEVELS[0], i = 0;
-    for (let j = LEVELS.length-1; j >= 0; j--) {
+    for (let j = LEVELS.length - 1; j >= 0; j--) {
         if (p >= LEVELS[j].min) { lv = LEVELS[j]; i = j; break; }
     }
-    const next = LEVELS[i+1];
+    const next = LEVELS[i + 1];
     const prog = next ? ((p - lv.min) / (next.min - lv.min)) * 100 : 100;
-    return {...lv, num: i+1, prog, next: next ? next.min : p};
+    return { title: lv.title, icon: lv.icon, num: i + 1, prog: prog, next: next ? next.min : p };
 }
 
 function updateXP() {
-    document.getElementById('totalPts').textContent = `⭐ ${totalPoints}`;
+    document.getElementById('totalPts').textContent = '⭐ ' + totalPoints;
     const lv = getLevel(totalPoints);
-    document.getElementById('levelBadge').textContent = `Lv.${lv.num}`;
-    document.getElementById('levelTitle').textContent = `${lv.icon} ${lv.title}`;
-    document.getElementById('xpLabel').textContent = `${totalPoints} / ${lv.next}`;
+    document.getElementById('levelBadge').textContent = 'Lv.' + lv.num;
+    document.getElementById('levelTitle').textContent = lv.icon + ' ' + lv.title;
+    document.getElementById('xpLabel').textContent = totalPoints + ' / ' + lv.next;
     document.getElementById('xpFill').style.width = Math.min(100, lv.prog) + '%';
     localStorage.setItem('ortho_pts', totalPoints);
 }
@@ -495,7 +463,7 @@ function dailyBonus() {
         totalPoints += 50;
         updateXP();
         unlock('daily');
-        setTimeout(() => showPopup('📅', 'ዕለታዊ ቦነስ!', '+50 ነጥብ አግኝተሃል'), 500);
+        setTimeout(function() { showPopup('📅', 'ዕለታዊ ቦነስ!', '+50 ነጥብ አግኝተሃል'); }, 500);
     }
 }
 
@@ -518,17 +486,17 @@ function loadBank() {
             banks.default = bank;
             localStorage.setItem('ortho_banks', JSON.stringify(banks));
         } else {
-            fetch('questions.json').then(r => r.json()).then(d => {
+            fetch('questions.json').then(function(r) { return r.json(); }).then(function(d) {
                 bank = d;
                 banks.default = d;
                 localStorage.setItem('ortho_banks', JSON.stringify(banks));
                 localStorage.setItem('ortho_bank', JSON.stringify(d));
-            }).catch(() => {
+            }).catch(function() {
                 bank = [{
-                    id:"1", category:"Amstu_Aemade_Mstirat", subcategory:"Mstire_Selasie",
-                    question:"ከአምስቱ አእማደ ምስጢራት መካከል የመጀመሪያው ምስጢር የትኛው ነው?",
-                    a:"ምሥጢረ ሥጋዌ", b:"ምሥጢረ ሥላሴ", c:"ምሥጢረ ጥምቀት", d:"ምሥጢረ ቁርባን",
-                    answer:"B", explanation:"አምስቱ አእማደ ምስጢራት፡ ምሥጢረ ሥላሴ፣ ምሥጢረ ሥጋዌ፣ ምሥጢረ ጥምቀት፣ ምሥጢረ ቁርባን እና ምሥጢረ ትንሣኤ ሙታን ናቸው።"
+                    id: "1", category: "Amstu_Aemade_Mstirat", subcategory: "Mstire_Selasie",
+                    question: "ከአምስቱ አእማደ ምስጢራት መካከል የመጀመሪያው ምስጢር የትኛው ነው?",
+                    a: "ምሥጢረ ሥጋዌ", b: "ምሥጢረ ሥላሴ", c: "ምሥጢረ ጥምቀት", d: "ምሥጢረ ቁርባን",
+                    answer: "B", explanation: "አምስቱ አእማደ ምስጢራት፡ ምሥጢረ ሥላሴ፣ ምሥጢረ ሥጋዌ፣ ምሥጢረ ጥምቀት፣ ምሥጢረ ቁርባን እና ምሥጢረ ትንሣኤ ሙታን ናቸው።"
                 }];
             });
         }
@@ -536,10 +504,10 @@ function loadBank() {
 }
 
 function nav(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
     document.getElementById(id).classList.add('active');
     if (id !== 'screenMain') {
-        if (history[history.length-1] !== id) history.push(id);
+        if (history[history.length - 1] !== id) history.push(id);
         document.getElementById('backBar').style.display = 'block';
     } else {
         history = ['screenMain'];
@@ -549,8 +517,8 @@ function nav(id) {
 function goBack() {
     if (history.length > 1) {
         history.pop();
-        const prev = history[history.length-1];
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const prev = history[history.length - 1];
+        document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
         document.getElementById(prev).classList.add('active');
         if (prev === 'screenMain') document.getElementById('backBar').style.display = 'none';
     }
@@ -559,14 +527,14 @@ function goHome() { history = ['screenMain']; nav('screenMain'); updateWeekly();
 
 function catName(k) {
     const m = {
-        'Ye-Tekalale':'የተቀላቀለ','Ye-Adminu_Ye-Zare_Tyaqewoch':'የዛሬ ጥያቄዎች',
-        'Addis_Kidan':'አዲስ ኪዳን','Bluy_Kidan':'ብሉይ ኪዳን','Amstu_Aemade_Mstirat':'አምስቱ አእማደ ምስጢራት',
-        'Mstire_Selasie':'ምሥጢረ ሥላሴ','Mstire_Sigawe':'ምሥጢረ ሥጋዌ','Mstire_Timket':'ምሥጢረ ጥምቀት',
-        'Mstire_Qurban':'ምሥጢረ ቁርባን','Mstire_Tinsae_Mutan':'ምሥጢረ ትንሣኤ','Hulumn_qelaql':'ሁሉንም ቀላቅል',
-        'Negere_Kristos':'ነገረ ክርስቶስ','SebatuMstirat':'ሰባቱ ምስጢራት','Kidusan_ena_Emebetachin':'ቅዱሳን እና እመቤታችን',
-        'Abew_Kidusan':'አበው ቅዱሳን','Tarikoch':'ታሪኮች','Trguame':'ትርጓሜ',
-        'Orthodox_Dogma_Srate_Betekristian':'ዶግማ እና ሥርዓት','Aqabe_Emnet_Protestant':'አቃቤ እምነት (ፕሮቴስታንት)',
-        'Aqabe_Emnet_Muslim':'አቃቤ እምነት (ሙስሊም)'
+        'Ye-Tekalale': 'የተቀላቀለ', 'Ye-Adminu_Ye-Zare_Tyaqewoch': 'የዛሬ ጥያቄዎች',
+        'Addis_Kidan': 'አዲስ ኪዳን', 'Bluy_Kidan': 'ብሉይ ኪዳን', 'Amstu_Aemade_Mstirat': 'አምስቱ አእማደ ምስጢራት',
+        'Mstire_Selasie': 'ምሥጢረ ሥላሴ', 'Mstire_Sigawe': 'ምሥጢረ ሥጋዌ', 'Mstire_Timket': 'ምሥጢረ ጥምቀት',
+        'Mstire_Qurban': 'ምሥጢረ ቁርባን', 'Mstire_Tinsae_Mutan': 'ምሥጢረ ትንሣኤ', 'Hulumn_qelaql': 'ሁሉንም ቀላቅል',
+        'Negere_Kristos': 'ነገረ ክርስቶስ', 'SebatuMstirat': 'ሰባቱ ምስጢራት', 'Kidusan_ena_Emebetachin': 'ቅዱሳን እና እመቤታችን',
+        'Abew_Kidusan': 'አበው ቅዱሳን', 'Tarikoch': 'ታሪኮች', 'Trguame': 'ትርጓሜ',
+        'Orthodox_Dogma_Srate_Betekristian': 'ዶግማ እና ሥርዓት', 'Aqabe_Emnet_Protestant': 'አቃቤ እምነት (ፕሮቴስታንት)',
+        'Aqabe_Emnet_Muslim': 'አቃቤ እምነት (ሙስሊም)'
     };
     return m[k] || k;
 }
@@ -576,7 +544,7 @@ function pickCat(k) { mainCat = k; subCat = ''; document.getElementById('catTitl
 function pickSub(k) { subCat = k; document.getElementById('catTitle').textContent = 'ምድብ: ' + catName(k); nav('screenCount'); }
 
 function startQuiz(n) {
-    let list = bank.filter(q => {
+    let list = bank.filter(function(q) {
         if (subCat) {
             if (subCat === 'Hulumn_qelaql') return q.category === 'Amstu_Aemade_Mstirat';
             return q.subcategory === subCat;
@@ -585,7 +553,7 @@ function startQuiz(n) {
         return q.category === mainCat;
     });
     if (!list.length) { tg.showAlert('ለዚህ ምድብ ጥያቄ የለም'); return; }
-    list.sort(() => Math.random() - 0.5);
+    list.sort(function() { return Math.random() - 0.5; });
     const c = (n === 'random' || n > list.length) ? list.length : n;
     questions = list.slice(0, c);
     idx = 0; score = 0; pts = 0; streak = 0; maxStreak = 0; times = []; missed = [];
@@ -598,21 +566,21 @@ function renderQ() {
     document.getElementById('nextBtn').style.display = 'none';
     document.getElementById('explainBox').style.display = 'none';
     const q = questions[idx];
-    document.getElementById('qProg').textContent = `\( {idx+1}/ \){questions.length}`;
+    document.getElementById('qProg').textContent = (idx + 1) + '/' + questions.length;
     document.getElementById('qCat').textContent = catName(q.subcategory || q.category);
     document.getElementById('qText').textContent = q.question;
 
     const sb = document.getElementById('streakBadge');
-    if (streak >= 2) { sb.textContent = `🔥 ${streak}x`; sb.style.display = 'inline-block'; }
+    if (streak >= 2) { sb.textContent = '🔥 ' + streak + 'x'; sb.style.display = 'inline-block'; }
     else sb.style.display = 'none';
 
     const box = document.getElementById('opts');
     box.innerHTML = '';
-    ['A','B','C','D'].forEach(k => {
+    ['A', 'B', 'C', 'D'].forEach(function(k) {
         const b = document.createElement('button');
         b.className = 'opt';
-        b.textContent = `${k}. ${q[k.toLowerCase()]}`;
-        b.onclick = () => check(k, b);
+        b.textContent = k + '. ' + q[k.toLowerCase()];
+        b.onclick = function() { check(k, b); };
         box.appendChild(b);
     });
 
@@ -621,9 +589,9 @@ function renderQ() {
     const fill = document.getElementById('timerFill');
     fill.style.width = '100%';
     fill.style.background = 'var(--green)';
-    timer = setInterval(() => {
+    timer = setInterval(function() {
         left--;
-        fill.style.width = (left/20*100) + '%';
+        fill.style.width = (left / 20 * 100) + '%';
         if (left <= 7) fill.style.background = 'var(--orange)';
         if (left <= 3) fill.style.background = 'var(--red)';
         if (left <= 0) { clearInterval(timer); check('TIMEOUT', null); }
@@ -632,11 +600,11 @@ function renderQ() {
 
 function check(sel, el) {
     clearInterval(timer);
-    const elapsed = Math.round((Date.now() - startTime)/1000);
+    const elapsed = Math.round((Date.now() - startTime) / 1000);
     times.push(elapsed);
     const q = questions[idx];
     const ok = sel === q.answer;
-    document.querySelectorAll('.opt').forEach(b => b.onclick = null);
+    document.querySelectorAll('.opt').forEach(function(b) { b.onclick = null; });
 
     if (ok) {
         score++; streak++;
@@ -652,8 +620,8 @@ function check(sel, el) {
         streak = 0;
         missed.push(q);
         if (el) el.classList.add('wrong');
-        document.querySelectorAll('.opt').forEach(b => {
-            if (b.textContent.startsWith(q.answer)) b.classList.add('correct');
+        document.querySelectorAll('.opt').forEach(function(b) {
+            if (b.textContent.indexOf(q.answer + '.') === 0) b.classList.add('correct');
         });
         if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
     }
@@ -673,7 +641,7 @@ function nextQ() {
 function finish() {
     nav('screenRes');
     const total = questions.length;
-    const acc = Math.round(score/total*100);
+    const acc = Math.round(score / total * 100);
     totalPoints += pts;
     updateXP();
     saveScore();
@@ -685,12 +653,12 @@ function finish() {
     localStorage.setItem('ortho_mast', JSON.stringify(mastery));
     if (mastery[key] >= 50) unlock('master');
 
-    document.getElementById('resScore').textContent = `\( {score}/ \){total}`;
-    document.getElementById('resPts').textContent = `+${pts} ነጥብ`;
-    document.getElementById('resAcc').textContent = `ትክክለኛነት: ${acc}%`;
-    const t = times.reduce((a,b)=>a+b,0);
+    document.getElementById('resScore').textContent = score + '/' + total;
+    document.getElementById('resPts').textContent = '+' + pts + ' ነጥብ';
+    document.getElementById('resAcc').textContent = 'ትክክለኛነት: ' + acc + '%';
+    const t = times.reduce(function(a, b) { return a + b; }, 0);
     document.getElementById('resTime').textContent = t + 's';
-    document.getElementById('resAvg').textContent = Math.round(t/total) + 's';
+    document.getElementById('resAvg').textContent = Math.round(t / total) + 's';
     document.getElementById('resStreak').textContent = maxStreak;
 
     const box = document.getElementById('resBadges');
@@ -700,11 +668,11 @@ function finish() {
         if (total >= 5) unlock('p5');
         if (total >= 10) unlock('p10');
     }
-    if (Math.round(t/total) <= 5) { box.innerHTML += '<span class="chip">⚡ ፍጥነት</span>'; unlock('speed'); }
+    if (Math.round(t / total) <= 5) { box.innerHTML += '<span class="chip">⚡ ፍጥነት</span>'; unlock('speed'); }
     if (maxStreak >= 3) box.innerHTML += '<span class="chip">🔥 Streak</span>';
     if (getLevel(totalPoints).num >= 3) unlock('lv3');
 
-    if (acc === 100 && typeof confetti === 'function') confetti({particleCount:80, spread:60, origin:{y:0.6}});
+    if (acc === 100 && typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
 
     document.getElementById('retakeBtn').style.display = missed.length ? 'flex' : 'none';
     let msg = '🌟 በጣም ጥሩ! ቀጥሉ።';
@@ -712,33 +680,38 @@ function finish() {
     else if (acc < 50) msg = '💪 ተስፋ አትቁረጡ! ደግመው ይሥሩ።';
     document.getElementById('resMsg').textContent = msg;
 
-    // send to bot
     try {
         tg.sendData(JSON.stringify({
             type: 'score',
             name: user.first_name || 'ተጫዋች',
             userId: uid,
             category: catName(subCat || mainCat),
-            score, total, accuracy: acc,
-            points: pts, maxStreak,
+            score: score, total: total, accuracy: acc,
+            points: pts, maxStreak: maxStreak,
             level: getLevel(totalPoints).num,
-            achievements: ach.slice(-3).map(id => {
-                const a = ACHIEVEMENTS.find(x => x.id === id);
-                return a ? a.icon + ' ' + a.title : '';
-            }).filter(Boolean).join(' • '),
             botUsername: BOT_USERNAME
         }));
-    } catch(e){}
+    } catch (e) {}
 }
 
 function shareResult() {
-    const acc = Math.round(score/questions.length*100);
-    const text = `🏆 የኦርቶዶክስ ተዋሕዶ ውጤቴ!\n\n👤 ${user.first_name||'ተጫዋች'}\n📚 ${catName(subCat||mainCat)}\n🎯 \( {score}/ \){questions.length} (\( {acc}%)\n⭐ + \){pts} ነጥብ\n🔥 Max Streak: ${maxStreak}x\n\nተወዳደሩ 👇`;
-    tg.openTelegramLink(`https://t.me/share/url?url=https://t.me/\( {BOT_USERNAME}&text= \){encodeURIComponent(text)}`);
+    const total = questions.length;
+    const acc = Math.round(score / total * 100);
+    const text =
+        '🏆 የኦርቶዶክስ ተዋሕዶ ትምህርት የጨዋታ ውጤቴ!\n\n' +
+        '👤 ተጫዋች: ' + (user.first_name || 'ተጫዋች') + '\n' +
+        '📚 ምድብ: ' + catName(subCat || mainCat) + '\n' +
+        '🎯 ውጤት: ' + score + '/' + total + ' (' + acc + '%)\n' +
+        '⭐ ያገኘሁት ነጥብ: ' + pts + '\n' +
+        '🔥 Max Streak: ' + maxStreak + 'x\n\n' +
+        'ውድ ኦርቶዶክሳውያን 🙏 የእኔን ጥያቄ ውድድር ሪከርድ መስበር ትችላላችሁ? ከታች ያለውን ቦት በመንካት ይወዳደሩ! 👇\n\n' +
+        'https://t.me/' + BOT_USERNAME;
+
+    tg.openTelegramLink('https://t.me/share/url?url=https://t.me/' + BOT_USERNAME + '&text=' + encodeURIComponent(text));
 }
 
 function retakeMissed() {
-    questions = [...missed];
+    questions = missed.slice();
     idx = 0; score = 0; pts = 0; streak = 0; times = []; missed = [];
     nav('screenQuiz');
     renderQ();
@@ -754,7 +727,7 @@ function saveScore() {
         points: pts,
         date: new Date().toLocaleDateString('am-ET')
     });
-    board.sort((a,b) => b.points - a.points);
+    board.sort(function(a, b) { return b.points - a.points; });
     board = board.slice(0, 15);
     localStorage.setItem('ortho_lb', JSON.stringify(board));
 }
@@ -776,33 +749,46 @@ function openLB() {
         list.innerHTML = '<p style="text-align:center;opacity:0.7;padding:20px;">እስካሁን ውጤት የለም</p>';
         return;
     }
-    const medals = ['🥇','🥈','🥉'];
-    board.forEach((item, i) => {
+    const medals = ['🥇', '🥈', '🥉'];
+    board.forEach(function(item, i) {
         const row = document.createElement('div');
         row.className = 'lb-item';
-        const av = item.photo ? `<img src="${item.photo}">` : '👤';
-        const nameHtml = (isAdmin && item.username)
-            ? `<span style="text-decoration:underline;cursor:pointer;" onclick="tg.openTelegramLink('https://t.me/\( {item.username}')"> \){item.name}</span>`
-            : `<strong>${item.name}</strong>`;
-        row.innerHTML = `
-            <div class="lb-rank">${medals[i] || (i+1)}</div>
-            <div class="lb-avatar">${av}</div>
-            <div style="flex:1;">
-                <div>${nameHtml}</div>
-                <div style="font-size:0.7rem;opacity:0.65;">${item.date||''}</div>
-            </div>
-            <div style="font-weight:700;color:var(--gold);">⭐ ${item.points}</div>
-        `;
+
+        let avatarHtml = '👤';
+        if (item.photo) {
+            avatarHtml = '<img src="' + item.photo + '">';
+        }
+
+        let nameHtml = '<strong>' + item.name + '</strong>';
+        if (isAdmin && item.username) {
+            nameHtml = '<span style="text-decoration:underline;cursor:pointer;" onclick="tg.openTelegramLink(\'https://t.me/' + item.username + '\')">' + item.name + '</span>';
+        }
+
+        let idHtml = '';
+        if (isAdmin) {
+            idHtml = '<div style="font-size:0.68rem;opacity:0.6;">ID: ' + (item.id || '') + '</div>';
+        }
+
+        row.innerHTML =
+            '<div class="lb-rank">' + (medals[i] || (i + 1)) + '</div>' +
+            '<div class="lb-avatar">' + avatarHtml + '</div>' +
+            '<div style="flex:1;">' +
+                '<div>' + nameHtml + '</div>' +
+                idHtml +
+                '<div style="font-size:0.7rem;opacity:0.65;">' + (item.date || '') + '</div>' +
+            '</div>' +
+            '<div style="font-weight:700;color:var(--gold);">⭐ ' + item.points + '</div>';
+
         list.appendChild(row);
     });
 }
 
 function unlock(id) {
-    if (ach.includes(id)) return;
+    if (ach.indexOf(id) !== -1) return;
     ach.push(id);
     localStorage.setItem('ortho_ach', JSON.stringify(ach));
-    const a = ACHIEVEMENTS.find(x => x.id === id);
-    if (a) setTimeout(() => showPopup(a.icon, a.title, a.desc), 300);
+    const a = ACHIEVEMENTS.find(function(x) { return x.id === id; });
+    if (a) setTimeout(function() { showPopup(a.icon, a.title, a.desc); }, 300);
 }
 function showPopup(icon, title, desc) {
     document.getElementById('pIcon').textContent = icon;
@@ -816,18 +802,17 @@ function openAch() {
     nav('screenAch');
     const list = document.getElementById('achList');
     list.innerHTML = '';
-    ACHIEVEMENTS.forEach(a => {
-        const unlocked = ach.includes(a.id);
+    ACHIEVEMENTS.forEach(function(a) {
+        const unlocked = ach.indexOf(a.id) !== -1;
         const div = document.createElement('div');
-        div.style.cssText = `display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.07);opacity:${unlocked?1:0.4}`;
-        div.innerHTML = `
-            <div style="font-size:1.5rem;">${a.icon}</div>
-            <div style="flex:1;">
-                <div style="font-weight:700;">${a.title}</div>
-                <div style="font-size:0.75rem;opacity:0.8;">${a.desc}</div>
-            </div>
-            <div>${unlocked ? '✅' : '🔒'}</div>
-        `;
+        div.style.cssText = 'display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.07);opacity:' + (unlocked ? 1 : 0.4);
+        div.innerHTML =
+            '<div style="font-size:1.5rem;">' + a.icon + '</div>' +
+            '<div style="flex:1;">' +
+                '<div style="font-weight:700;">' + a.title + '</div>' +
+                '<div style="font-size:0.75rem;opacity:0.8;">' + a.desc + '</div>' +
+            '</div>' +
+            '<div>' + (unlocked ? '✅' : '🔒') + '</div>';
         list.appendChild(div);
     });
 }
@@ -840,19 +825,18 @@ function openAdmin() {
 
     const box = document.getElementById('aPlayers');
     box.innerHTML = '';
-    Object.values(players).sort((a,b)=>b.totalPoints-a.totalPoints).forEach(p => {
+    Object.values(players).sort(function(a, b) { return b.totalPoints - a.totalPoints; }).forEach(function(p) {
         const row = document.createElement('div');
         row.className = 'admin-row';
-        row.innerHTML = `
-            <div>
-                <div>${p.name} ${p.username ? '@'+p.username : ''}</div>
-                <div style="font-size:0.7rem;opacity:0.6;">ID: ${p.id}</div>
-            </div>
-            <div style="color:var(--gold);font-weight:700;">${p.totalPoints}</div>
-        `;
+        row.innerHTML =
+            '<div>' +
+                '<div>' + p.name + (p.username ? ' @' + p.username : '') + '</div>' +
+                '<div style="font-size:0.7rem;opacity:0.6;">ID: ' + p.id + '</div>' +
+            '</div>' +
+            '<div style="color:var(--gold);font-weight:700;">' + p.totalPoints + '</div>';
         if (p.username) {
             row.style.cursor = 'pointer';
-            row.onclick = () => tg.openTelegramLink('https://t.me/' + p.username);
+            row.onclick = function() { tg.openTelegramLink('https://t.me/' + p.username); };
         }
         box.appendChild(row);
     });
@@ -872,20 +856,20 @@ function onFile(e) {
     const f = e.target.files[0];
     if (!f) return;
     const r = new FileReader();
-    r.onload = ev => {
+    r.onload = function(ev) {
         try {
             const data = JSON.parse(ev.target.result);
             if (!Array.isArray(data)) { tg.showAlert('JSON Array መሆን አለበት'); return; }
-            const name = f.name.replace('.json','') + '_' + Date.now().toString().slice(-4);
+            const name = f.name.replace('.json', '') + '_' + Date.now().toString().slice(-4);
             banks[name] = data;
             localStorage.setItem('ortho_banks', JSON.stringify(banks));
             bank = data;
             localStorage.setItem('ortho_active', name);
             localStorage.setItem('ortho_bank', JSON.stringify(data));
-            tg.showAlert(`✅ ${data.length} ጥያቄ ተጭኗል\nባንክ: ${name}`);
+            tg.showAlert('✅ ' + data.length + ' ጥያቄ ተጭኗል\nባንክ: ' + name);
             document.getElementById('aQ').textContent = data.length;
             document.getElementById('aB').textContent = Object.keys(banks).length;
-        } catch(err) { tg.showAlert('ፋይሉን ማንበብ አልተቻለም'); }
+        } catch (err) { tg.showAlert('ፋይሉን ማንበብ አልተቻለም'); }
     };
     r.readAsText(f);
 }
@@ -893,8 +877,8 @@ function onFile(e) {
 function selectBank() {
     const names = Object.keys(banks);
     if (!names.length) { tg.showAlert('ባንክ የለም'); return; }
-    const choice = prompt('ባንክ ምረጥ:\n' + names.map((n,i)=>`${i+1}. \( {n} ( \){banks[n].length})`).join('\n'));
-    const i = parseInt(choice)-1;
+    const choice = prompt('ባንክ ምረጥ:\n' + names.map(function(n, i) { return (i + 1) + '. ' + n + ' (' + banks[n].length + ')'; }).join('\n'));
+    const i = parseInt(choice) - 1;
     if (i >= 0 && i < names.length) {
         bank = banks[names[i]];
         localStorage.setItem('ortho_active', names[i]);
@@ -904,4 +888,4 @@ function selectBank() {
 }
 </script>
 </body>
-    </html>
+</html>
